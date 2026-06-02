@@ -581,7 +581,7 @@ async function pickerCallback(data) {
 // ── CLOUDINARY ────────────────────────────────────────────────
 const CLD_CLOUD  = 'dxxi4v4yw';
 const CLD_PRESET = 'triton_alumni';
-const CLD_UPLOAD = `https://api.cloudinary.com/v1_1/${CLD_CLOUD}/auto/upload`;
+const CLD_UPLOAD = `https://api.cloudinary.com/v1_1/${CLD_CLOUD}/image/upload`;
 
 // ── TAG TAXONOMY ──────────────────────────────────────────────
 const TAGS = {
@@ -961,7 +961,7 @@ window.startUpload = async function() {
         
 
         const res = await fetch(CLD_UPLOAD, { method:'POST', body:fd });
-        if (!res.ok) throw new Error(`Cloudinary error: ${res.statusText}`);
+        const errBody = await res.clone().json().catch(()=>({})); if (!res.ok) throw new Error(`Cloudinary: ${errBody.error?.message || res.statusText} (${res.status})`);
         const cld = await res.json();
 
         const isVid     = cld.resource_type === 'video';
