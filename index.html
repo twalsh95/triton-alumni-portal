@@ -526,7 +526,7 @@ let   gAccessToken = null;
 
 // Load gapi picker
 window.addEventListener('load', () => {
-  gapi.load('picker', () => { gapiReady = true; });
+  gapi.load('picker:client', () => { gapi.client.init({}).then(() => { gapiReady = true; }); });
 });
 
 function getGoogleToken(cb) {
@@ -552,6 +552,7 @@ window.openDrivePicker = function() {
       .setOAuthToken(token)
       .setDeveloperKey(GAPI_KEY)
       .setTitle('Select photos or videos from Google Drive')
+      .setOrigin(window.location.protocol + '//' + window.location.host)
       .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
       .setCallback(pickerCallback)
       .build();
@@ -957,7 +958,7 @@ window.startUpload = async function() {
         const fd = new FormData();
         fd.append('file',           item.file);
         fd.append('upload_preset',  CLD_PRESET);
-        fd.append('folder',         'triton_alumni');
+        
 
         const res = await fetch(CLD_UPLOAD, { method:'POST', body:fd });
         if (!res.ok) throw new Error(`Cloudinary error: ${res.statusText}`);
