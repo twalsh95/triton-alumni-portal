@@ -170,6 +170,15 @@ main{max-width:1200px;margin:0 auto;padding:48px 32px;}
 
 /* UPLOAD PANEL */
 .upload-panel{background:var(--white);border-radius:var(--rl);padding:32px;box-shadow:var(--sc);}
+
+/* source tabs */
+.source-tabs{display:flex;gap:0;margin-bottom:0;border-radius:var(--r) var(--r) 0 0;overflow:hidden;border:1.5px solid var(--gl);border-bottom:none;}
+.src-tab{font-family:'Dosis',sans-serif;font-weight:700;font-size:12px;letter-spacing:.06em;text-transform:uppercase;flex:1;padding:12px 8px;background:var(--off);color:var(--muted);border:none;border-right:1.5px solid var(--gl);transition:all .18s;cursor:pointer;}
+.src-tab:last-child{border-right:none;}
+.src-tab:hover{background:var(--gl);color:var(--blue);}
+.src-tab.active{background:var(--white);color:var(--blue);border-bottom:2px solid var(--white);margin-bottom:-1px;position:relative;z-index:1;}
+.source-panel{display:none;border:1.5px solid var(--gl);border-radius:0 0 var(--r) var(--r);padding:20px;background:var(--white);}
+.source-panel.active{display:block;}
 .up-title{font-family:'Dosis',sans-serif;font-weight:800;font-size:24px;color:var(--blue);margin-bottom:6px;}
 .up-subtitle{font-size:14px;color:var(--muted);margin-bottom:28px;padding-bottom:18px;border-bottom:2px solid var(--gl);}
 .up-section{margin-bottom:28px;}
@@ -396,22 +405,68 @@ footer small{font-size:12px;color:rgba(183,213,230,.45);}
 
       <!-- STEP 1: SOURCE -->
       <div class="up-section">
-        <label class="up-label"><span class="up-step">1</span> Add Files</label>
-        <div class="source-picker">
-          <div class="source-btn" onclick="document.getElementById('fileInput').click()">
-            <span class="source-btn-icon">🖥️</span>
-            <span class="source-btn-label">From Your Device</span>
-            <span class="source-btn-sub">Drag &amp; drop or browse<br>JPG, PNG, MP4, MOV and more</span>
+        <label class="up-label"><span class="up-step">1</span> Add Media</label>
+
+        <!-- SOURCE TAB BAR -->
+        <div class="source-tabs">
+          <button class="src-tab active" id="st-device" onclick="switchSource('device')">🖥 Device Upload</button>
+          <button class="src-tab" id="st-drive"  onclick="switchSource('drive')">📁 Google Drive Link</button>
+          <button class="src-tab" id="st-video"  onclick="switchSource('video')">▶ YouTube / Vimeo</button>
+        </div>
+
+        <!-- DEVICE PANEL -->
+        <div class="source-panel active" id="sp-device">
+          <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+            <p>Drag &amp; drop photos here, or click to browse</p>
+            <small>JPG, PNG, GIF · Multiple files · 10MB max per file</small>
+            <br>
+            <button class="btn-browse" onclick="event.stopPropagation();document.getElementById('fileInput').click()">Browse Files</button>
           </div>
-          <div class="source-btn drive" onclick="openDrivePicker()">
-            <span class="source-btn-icon">📁</span>
-            <span class="source-btn-label">From Google Drive</span>
-            <span class="source-btn-sub">Pick photos or videos<br>already in your Drive</span>
+          <p style="font-size:12px;color:var(--muted);margin-top:8px;text-align:center;">You can also drag &amp; drop files anywhere on this page</p>
+        </div>
+
+        <!-- DRIVE PANEL -->
+        <div class="source-panel" id="sp-drive">
+          <div style="background:var(--off);border-radius:var(--rl);padding:20px 24px;">
+            <p style="font-family:'Dosis',sans-serif;font-weight:700;font-size:13px;color:var(--blue);margin-bottom:8px;">How to get a Drive sharing link:</p>
+            <ol style="font-size:13px;color:var(--muted);padding-left:18px;line-height:1.8;margin-bottom:16px;">
+              <li>Open Google Drive and find your file</li>
+              <li>Right-click the file → <strong>Share</strong> → <strong>Copy link</strong></li>
+              <li>Make sure access is set to <strong>"Anyone with the link"</strong></li>
+              <li>Paste the link below</li>
+            </ol>
+            <label class="up-label" style="margin-bottom:6px;">Paste Drive link</label>
+            <div style="display:flex;gap:8px;align-items:flex-start;">
+              <input type="text" id="driveLinkInput" class="up-input"
+                style="font-size:13px;"
+                placeholder="https://drive.google.com/file/d/...">
+              <button onclick="addDriveLink()" class="btn-browse" style="white-space:nowrap;padding:11px 18px;margin-top:0;">+ Add</button>
+            </div>
+            <p style="font-size:12px;color:var(--muted);margin-top:8px;">One file at a time. For bulk uploads use Device Upload instead.</p>
           </div>
         </div>
+
+        <!-- VIDEO PANEL -->
+        <div class="source-panel" id="sp-video">
+          <div style="background:var(--off);border-radius:var(--rl);padding:20px 24px;">
+            <p style="font-family:'Dosis',sans-serif;font-weight:700;font-size:13px;color:var(--blue);margin-bottom:8px;">Embed a YouTube or Vimeo video:</p>
+            <ol style="font-size:13px;color:var(--muted);padding-left:18px;line-height:1.8;margin-bottom:16px;">
+              <li>Go to YouTube or Vimeo and find your video</li>
+              <li>Copy the URL from your browser's address bar</li>
+              <li>Paste it below — works with standard watch URLs</li>
+            </ol>
+            <label class="up-label" style="margin-bottom:6px;">Paste video URL</label>
+            <div style="display:flex;gap:8px;align-items:flex-start;">
+              <input type="text" id="videoUrlInput" class="up-input"
+                style="font-size:13px;"
+                placeholder="https://www.youtube.com/watch?v=... or https://vimeo.com/...">
+              <button onclick="addVideoUrl()" class="btn-browse" style="white-space:nowrap;padding:11px 18px;margin-top:0;">+ Add</button>
+            </div>
+            <p style="font-size:12px;color:var(--muted);margin-top:8px;">The video stays hosted on YouTube/Vimeo. The portal embeds it for viewing.</p>
+          </div>
+        </div>
+
         <input type="file" id="fileInput" multiple accept="image/*,video/*" style="display:none;">
-        <!-- drop zone overlay on the whole panel -->
-        <div id="dropHint" style="text-align:center;padding:10px 0 0;font-size:13px;color:var(--muted);">You can also drag &amp; drop files anywhere on this page</div>
         <div class="file-list" id="fileList"></div>
       </div>
 
@@ -494,9 +549,7 @@ footer small{font-size:12px;color:rgba(183,213,230,.45);}
   </div>
 </div>
 
-<!-- Google APIs -->
-<script src="https://apis.google.com/js/api.js"></script>
-<script src="https://accounts.google.com/gsi/client"></script>
+<!-- Google API scripts removed — using Drive link paste instead -->
 
 <script type="module">
 // ── FIREBASE ──────────────────────────────────────────────────
@@ -519,80 +572,106 @@ const app  = initializeApp({
 const auth = getAuth(app);
 const db   = getFirestore(app);
 
-// ── GOOGLE PICKER / DRIVE ─────────────────────────────────────
-const GAPI_KEY     = 'AIzaSyA829_Msqav6591PK5VHExyLXzqxdHx6E8';
-const GCLIENT_ID   = '211919775847-o4qg7almr8u78qmm0q0hq8ghcoqdsai0.apps.googleusercontent.com';
-const DRIVE_SCOPE  = 'https://www.googleapis.com/auth/drive.readonly';
-let   gapiReady    = false;
-let   gAccessToken = null;
+// ── DRIVE LINK + VIDEO URL HELPERS ───────────────────────────
 
-// Load gapi picker
-window.addEventListener('load', () => {
-  gapi.load('picker', () => { gapiReady = true; });
-});
-
-function getGoogleToken(cb) {
-  const client = google.accounts.oauth2.initTokenClient({
-    client_id: GCLIENT_ID,
-    scope: DRIVE_SCOPE,
-    callback: (resp) => {
-      if (resp.access_token) { gAccessToken = resp.access_token; cb(resp.access_token); }
-      else { alert('Google sign-in cancelled or failed.'); }
-    },
-  });
-  client.requestAccessToken();
+// Extract Drive file ID from a sharing URL
+function parseDriveId(url) {
+  const patterns = [
+    /\/file\/d\/([a-zA-Z0-9_-]+)/,
+    /id=([a-zA-Z0-9_-]+)/,
+    /\/d\/([a-zA-Z0-9_-]+)/,
+  ];
+  for (const p of patterns) {
+    const m = url.match(p);
+    if (m) return m[1];
+  }
+  return null;
 }
 
-window.openDrivePicker = function() {
-  if (!gapiReady) {
-    alert('Google Picker is still loading — please wait a moment and try again.');
-    return;
+// Extract YouTube video ID from a URL
+function parseYouTubeId(url) {
+  const patterns = [
+    /youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/,
+    /youtu\.be\/([a-zA-Z0-9_-]+)/,
+    /youtube\.com\/embed\/([a-zA-Z0-9_-]+)/,
+  ];
+  for (const p of patterns) {
+    const m = url.match(p);
+    if (m) return m[1];
   }
-  const launch = (token) => {
-    try {
-      // Show all Drive files — let MIME type filter handle what's shown
-      const view = new google.picker.DocsView(google.picker.ViewId.DOCS)
-        .setIncludeFolders(true)
-        .setSelectFolderEnabled(false)
-        .setMimeTypes('image/jpeg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/webm,image/heic,image/heif');
+  return null;
+}
 
-      const origin = window.location.protocol + '//' + window.location.host;
+// Extract Vimeo video ID
+function parseVimeoId(url) {
+  const m = url.match(/vimeo\.com\/(\d+)/);
+  return m ? m[1] : null;
+}
 
-      const picker = new google.picker.PickerBuilder()
-        .addView(view)
-        .setOAuthToken(token)
-        .setDeveloperKey(GAPI_KEY)
-        .setAppId('211919775847')
-        .setTitle('Select photos or videos')
-        .setOrigin(origin)
-        .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
-        .setCallback(pickerCallback)
-        .build();
-
-      picker.setVisible(true);
-    } catch(e) {
-      alert('Picker error: ' + e.message + '. Make sure you are using the hosted version at twalsh95.github.io');
-    }
-  };
-  if (gAccessToken) launch(gAccessToken);
-  else getGoogleToken(launch);
+window.switchSource = function(src) {
+  ['device','drive','video'].forEach(s => {
+    document.getElementById('st-'+s).classList.toggle('active', s===src);
+    document.getElementById('sp-'+s).classList.toggle('active', s===src);
+  });
 };
 
-async function pickerCallback(data) {
-  if (data.action !== google.picker.Action.PICKED) return;
-  const docs = data[google.picker.Response.DOCUMENTS];
-  for (const d of docs) {
-    pendingFiles.push({
-      source:    'drive',
-      driveId:   d.id,
-      name:      d.name,
-      mimeType:  d.mimeType,
-      iconUrl:   d.iconUrl,
-      thumbUrl:  d.thumbnailUrl || null,
-    });
+window.addDriveLink = function() {
+  const input = document.getElementById('driveLinkInput');
+  const url   = input.value.trim();
+  if (!url) return;
+  const id = parseDriveId(url);
+  if (!id) {
+    alert('Could not find a file ID in that link. Make sure you copied the full sharing URL from Google Drive.');
+    return;
   }
+  // Determine if it's likely a video by checking URL or default to image
+  const isVid = url.includes('video') || url.includes('mp4') || url.includes('mov');
+  pendingFiles.push({
+    source:   'drive',
+    driveId:  id,
+    name:     'Drive file (' + id.slice(0,8) + '…)',
+    mimeType: isVid ? 'video/mp4' : 'image/jpeg',
+    thumbUrl: null,
+  });
+  input.value = '';
   renderFileList();
-}
+};
+
+window.addVideoUrl = function() {
+  const input = document.getElementById('videoUrlInput');
+  const url   = input.value.trim();
+  if (!url) return;
+
+  const ytId    = parseYouTubeId(url);
+  const vimeoId = parseVimeoId(url);
+
+  if (!ytId && !vimeoId) {
+    alert('Please paste a valid YouTube or Vimeo URL.');
+    return;
+  }
+
+  const embedUrl = ytId
+    ? 'https://www.youtube.com/embed/' + ytId
+    : 'https://player.vimeo.com/video/' + vimeoId;
+
+  const thumbUrl = ytId
+    ? 'https://img.youtube.com/vi/' + ytId + '/hqdefault.jpg'
+    : null;
+
+  const platform = ytId ? 'YouTube' : 'Vimeo';
+  const displayId = ytId || vimeoId;
+
+  pendingFiles.push({
+    source:    'embed',
+    embedUrl,
+    thumbUrl,
+    platform,
+    name:      platform + ' video (' + displayId + ')',
+    mimeType:  'video/embed',
+  });
+  input.value = '';
+  renderFileList();
+};
 
 // ── CLOUDINARY ────────────────────────────────────────────────
 const CLD_CLOUD  = 'dxxi4v4yw';
@@ -714,6 +793,8 @@ function mediaThumb(p, i) {
   return `<div class="ph">${phSVG(i)}</div>`;
 }
 
+function isEmbed(p) { return p.source === 'embed'; }
+
 // ── ALBUM INDEX ────────────────────────────────────────────────
 function getAlbums() {
   const map = {};
@@ -786,11 +867,12 @@ function renderAllPhotos() {
 
 function photoCardHTML(p, i) {
   const tags = (p.tags||[]).slice(0,3).map(t=>`<span class="pc-tag">${TAG_LABELS[t]||t}</span>`).join('');
-  const vidBadge   = isVideo(p)  ? `<span class="video-badge">▶ Video</span>` : '';
-  const driveBadge = isDrive(p)  ? `<span class="drive-badge">Drive</span>`   : '';
+  const vidBadge   = isVideo(p) && !isEmbed(p) ? `<span class="video-badge">▶ Video</span>` : '';
+  const driveBadge = isDrive(p)   ? `<span class="drive-badge">Drive</span>`              : '';
+  const embedBadge = isEmbed(p)   ? `<span class="drive-badge" style="background:rgba(192,57,43,.8);">▶ ${p.platform||'Video'}</span>` : '';
   return `<div class="photo-card" onclick="openLightbox('${p.id}')">
     ${mediaThumb(p,i)}
-    ${vidBadge}${driveBadge}
+    ${vidBadge}${driveBadge}${embedBadge}
     <div class="photo-card-overlay"><div class="photo-card-tags">${tags}</div></div>
   </div>`;
 }
@@ -825,8 +907,11 @@ window.openLightbox = function(id) {
   const p = allPhotos.find(x=>x.id===id); if(!p) return;
   const med = document.getElementById('lbMedia');
 
-  if (isDrive(p)) {
-    // Drive video — embed via preview iframe
+  if (p.source === 'embed') {
+    // YouTube / Vimeo embed
+    med.innerHTML = `<iframe src="${p.embedUrl}" allowfullscreen style="width:100%;height:100%;border:none;"></iframe>`;
+  } else if (isDrive(p)) {
+    // Drive file — embed via Drive preview
     med.innerHTML = `<iframe src="https://drive.google.com/file/d/${p.driveId}/preview" allowfullscreen></iframe>`;
   } else if (isVideo(p) && p.cloudinaryUrl) {
     med.innerHTML = `<video controls style="width:100%;height:100%;object-fit:contain;" src="${p.cloudinaryUrl}"></video>`;
@@ -846,7 +931,11 @@ window.openLightbox = function(id) {
   const actions = document.getElementById('lbActions');
   const canDelete = isOwner();
   const deleteBtn = canDelete ? `<button class="btn-del" onclick="deletePhoto('${p.id}')">🗑 Delete</button>` : '';
-  if (currentUser && p.cloudinaryUrl && !isDrive(p)) {
+  if (p.source === 'embed') {
+    // Embeds — watch on source platform
+    actions.innerHTML = `<a class="btn-dl" href="${p.embedUrl.replace('embed/','watch?v=').replace('player.vimeo.com/video/','vimeo.com/')}" target="_blank">▶ Watch on ${p.platform||'Video'}</a>
+      <button class="btn-cl" onclick="closeLightbox()">Close</button>${deleteBtn}`;
+  } else if (currentUser && p.cloudinaryUrl && !isDrive(p)) {
     actions.innerHTML = `<a class="btn-dl" href="${p.cloudinaryUrl}" download="${p.title||'media'}" target="_blank">⬇ Download</a>
       <button class="btn-cl" onclick="closeLightbox()">Close</button>${deleteBtn}`;
   } else if (currentUser && isDrive(p)) {
@@ -964,37 +1053,34 @@ function addLocalFiles(fl) {
 
 function renderFileList() {
   document.getElementById('fileList').innerHTML = pendingFiles.map((item, i) => {
+    let thumb, name, meta, badge;
     if (item.source === 'local') {
-      const f    = item.file;
-      const size = (f.size/1024/1024).toFixed(1)+'MB';
+      const f = item.file;
       const isImg = f.type.startsWith('image/');
-      const thumb = isImg
-        ? `<img class="file-thumb" src="${URL.createObjectURL(f)}" alt="">`
-        : `<div class="file-thumb-icon">🎬</div>`;
-      return `<div class="file-item" id="fi-${i}">
-        ${thumb}
-        <div class="file-info">
-          <div class="file-name">${f.name} <span class="file-source-badge local">Device</span></div>
-          <div class="file-meta">${size}</div>
-        </div>
-        <span class="file-status pending" id="fs-${i}">Pending</span>
-        <button class="file-remove" onclick="removeFile(${i})">✕</button>
-      </div>`;
-    } else {
-      const isVid = (item.mimeType||'').startsWith('video/');
-      const thumb = item.thumbUrl
-        ? `<img class="file-thumb" src="${item.thumbUrl}" alt="">`
-        : `<div class="file-thumb-drive">${isVid?'🎬':'📷'}</div>`;
-      return `<div class="file-item" id="fi-${i}">
-        ${thumb}
-        <div class="file-info">
-          <div class="file-name">${item.name} <span class="file-source-badge drive">Drive</span></div>
-          <div class="file-meta">${isVid ? 'Video' : 'Image'} · Google Drive</div>
-        </div>
-        <span class="file-status pending" id="fs-${i}">Pending</span>
-        <button class="file-remove" onclick="removeFile(${i})">✕</button>
-      </div>`;
+      thumb  = isImg ? `<img class="file-thumb" src="${URL.createObjectURL(f)}" alt="">` : `<div class="file-thumb-icon">🎬</div>`;
+      name   = f.name;
+      meta   = (f.size/1024/1024).toFixed(1)+'MB';
+      badge  = `<span class="file-source-badge local">Device</span>`;
+    } else if (item.source === 'drive') {
+      thumb  = item.thumbUrl ? `<img class="file-thumb" src="${item.thumbUrl}" alt="">` : `<div class="file-thumb-drive">📁</div>`;
+      name   = item.name;
+      meta   = 'Google Drive';
+      badge  = `<span class="file-source-badge drive">Drive</span>`;
+    } else if (item.source === 'embed') {
+      thumb  = item.thumbUrl ? `<img class="file-thumb" src="${item.thumbUrl}" alt="">` : `<div class="file-thumb-icon">▶</div>`;
+      name   = item.name;
+      meta   = item.platform + ' embed';
+      badge  = `<span class="file-source-badge" style="background:#ffe0e0;color:#c0392b;">${item.platform}</span>`;
     }
+    return `<div class="file-item" id="fi-${i}">
+      ${thumb}
+      <div class="file-info">
+        <div class="file-name">${name} ${badge}</div>
+        <div class="file-meta">${meta}</div>
+      </div>
+      <span class="file-status pending" id="fs-${i}">Pending</span>
+      <button class="file-remove" onclick="removeFile(${i})">✕</button>
+    </div>`;
   }).join('');
 }
 
@@ -1033,11 +1119,26 @@ window.startUpload = async function() {
     document.getElementById('progressLabel').textContent = `Uploading file ${i+1} of ${total}…`;
 
     try {
-      if (item.source === 'drive') {
+      if (item.source === 'embed') {
+        // YouTube / Vimeo embed
+        await addDoc(collection(db,'photos'), {
+          title:        title || item.name,
+          date,
+          tags,
+          source:       'embed',
+          embedUrl:     item.embedUrl,
+          thumbnailUrl: item.thumbUrl || null,
+          platform:     item.platform,
+          resourceType: 'video',
+          fileType:     'video/embed',
+          uploadedBy:   currentUser.uid,
+          uploadedAt:   serverTimestamp(),
+        });
+      } else if (item.source === 'drive') {
         // Drive files: store the Drive ID directly, embed via Drive preview
         const isVid = (item.mimeType||'').startsWith('video/');
         await addDoc(collection(db,'photos'), {
-          title:        title || item.name.replace(/\.[^.]+$/,''),
+          title:        title || item.name,
           date,
           tags,
           source:       'drive',
