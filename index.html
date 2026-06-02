@@ -921,7 +921,7 @@ window.addCustomTag = function() {
   const chip = document.createElement('span');
   chip.dataset.tag = raw;
   chip.style.cssText = 'display:inline-flex;align-items:center;gap:5px;font-family:Dosis,sans-serif;font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;background:var(--blue);color:var(--white);padding:5px 10px;border-radius:20px;';
-  chip.innerHTML = raw + ' <button style="background:none;border:none;color:rgba(255,255,255,.7);cursor:pointer;font-size:13px;padding:0;line-height:1;" onclick="removeCustomTag('' + raw + '')">x</button>';
+  chip.innerHTML = `${raw} <button style="background:none;border:none;color:rgba(255,255,255,.7);cursor:pointer;font-size:13px;padding:0;line-height:1;" onclick="removeCustomTag('${raw}')">&#x2715;</button>`;
   container.appendChild(chip);
 };
 
