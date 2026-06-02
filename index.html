@@ -165,6 +165,8 @@ main{max-width:1200px;margin:0 auto;padding:48px 32px;}
 .btn-dl:hover{background:var(--gold-h);}
 .btn-cl{font-family:'Dosis',sans-serif;font-weight:600;font-size:13px;letter-spacing:.06em;text-transform:uppercase;background:rgba(255,255,255,.1);color:var(--white);border:1px solid rgba(255,255,255,.25);padding:10px 20px;border-radius:var(--r);transition:all .2s;}
 .btn-cl:hover{background:rgba(255,255,255,.18);}
+.btn-del{font-family:'Dosis',sans-serif;font-weight:600;font-size:13px;letter-spacing:.06em;text-transform:uppercase;background:rgba(192,57,43,.25);color:#ff9999;border:1px solid rgba(192,57,43,.4);padding:10px 20px;border-radius:var(--r);transition:all .2s;margin-left:auto;}
+.btn-del:hover{background:rgba(192,57,43,.5);color:var(--white);}
 
 /* UPLOAD PANEL */
 .upload-panel{background:var(--white);border-radius:var(--rl);padding:32px;box-shadow:var(--sc);}
@@ -503,7 +505,7 @@ import { getAuth, createUserWithEmailAndPassword,
          signInWithEmailAndPassword, signOut as fbOut,
          onAuthStateChanged, sendPasswordResetEmail } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getFirestore, collection, doc, getDocs,
-         getDoc, setDoc, addDoc, query,
+         getDoc, setDoc, addDoc, deleteDoc, query,
          orderBy, serverTimestamp }                   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const app  = initializeApp({
@@ -526,7 +528,7 @@ let   gAccessToken = null;
 
 // Load gapi picker
 window.addEventListener('load', () => {
-  gapi.load('picker:client', () => { gapi.client.init({}).then(() => { gapiReady = true; }); });
+  gapi.load('picker', () => { gapiReady = true; });
 });
 
 function getGoogleToken(cb) {
@@ -542,21 +544,35 @@ function getGoogleToken(cb) {
 }
 
 window.openDrivePicker = function() {
-  if (!gapiReady) { alert('Google Picker is still loading, please try again in a moment.'); return; }
+  if (!gapiReady) {
+    alert('Google Picker is still loading — please wait a moment and try again.');
+    return;
+  }
   const launch = (token) => {
-    const view = new google.picker.DocsView()
-      .setIncludeFolders(false)
-      .setMimeTypes('image/jpeg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/webm');
-    const picker = new google.picker.PickerBuilder()
-      .addView(view)
-      .setOAuthToken(token)
-      .setDeveloperKey(GAPI_KEY)
-      .setTitle('Select photos or videos from Google Drive')
-      .setOrigin(window.location.protocol + '//' + window.location.host)
-      .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
-      .setCallback(pickerCallback)
-      .build();
-    picker.setVisible(true);
+    try {
+      // Show all Drive files — let MIME type filter handle what's shown
+      const view = new google.picker.DocsView(google.picker.ViewId.DOCS)
+        .setIncludeFolders(true)
+        .setSelectFolderEnabled(false)
+        .setMimeTypes('image/jpeg,image/png,image/gif,image/webp,video/mp4,video/quicktime,video/webm,image/heic,image/heif');
+
+      const origin = window.location.protocol + '//' + window.location.host;
+
+      const picker = new google.picker.PickerBuilder()
+        .addView(view)
+        .setOAuthToken(token)
+        .setDeveloperKey(GAPI_KEY)
+        .setAppId('211919775847')
+        .setTitle('Select photos or videos')
+        .setOrigin(origin)
+        .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
+        .setCallback(pickerCallback)
+        .build();
+
+      picker.setVisible(true);
+    } catch(e) {
+      alert('Picker error: ' + e.message + '. Make sure you are using the hosted version at twalsh95.github.io');
+    }
   };
   if (gAccessToken) launch(gAccessToken);
   else getGoogleToken(launch);
@@ -585,17 +601,32 @@ const CLD_UPLOAD = `https://api.cloudinary.com/v1_1/${CLD_CLOUD}/image/upload`;
 
 // ── TAG TAXONOMY ──────────────────────────────────────────────
 const TAGS = {
-  event:   ['graduation','prom','senior-week','capstone','athletics','school-event'],
-  program: ['media-arts','broadcast','screenwriting','graphic-design'],
-  class:   ['class-of-2025','class-of-2024','class-of-2023'],
+  event:   ['graduation','prom','senior-week','capstone','athletics','school-event','other'],
+  program: ['media-arts','broadcast','screenwriting','graphic-design','business','stem',
+            'social-services','medical','ela','arts','phys-ed','science',
+            'social-studies','world-language','ap'],
+  class:   ['class-of-2020','class-of-2021','class-of-2022','class-of-2023',
+            'class-of-2024','class-of-2025','class-of-2026','class-of-2027',
+            'class-of-2028','class-of-2029'],
   type:    ['photos','video'],
 };
 const TAG_LABELS = {
+  // Events
   'graduation':'Graduation','prom':'Prom','senior-week':'Senior Week',
-  'capstone':'Capstone','athletics':'Athletics','school-event':'School Event',
+  'capstone':'Capstone','athletics':'Athletics','school-event':'School Event','other':'Other',
+  // Programs
   'media-arts':'Media Arts','broadcast':'Broadcast','screenwriting':'Screenwriting',
-  'graphic-design':'Graphic Design',
-  'class-of-2025':'Class of 2025','class-of-2024':'Class of 2024','class-of-2023':'Class of 2023',
+  'graphic-design':'Graphic Design','business':'Business','stem':'STEM',
+  'social-services':'Social Services','medical':'Medical','ela':'ELA',
+  'arts':'Arts','phys-ed':'Phys Ed','science':'Science',
+  'social-studies':'Social Studies','world-language':'World Language','ap':'APs',
+  // Class years
+  'class-of-2020':'Class of 2020','class-of-2021':'Class of 2021',
+  'class-of-2022':'Class of 2022','class-of-2023':'Class of 2023',
+  'class-of-2024':'Class of 2024','class-of-2025':'Class of 2025',
+  'class-of-2026':'Class of 2026','class-of-2027':'Class of 2027',
+  'class-of-2028':'Class of 2028','class-of-2029':'Class of 2029',
+  // Type
   'photos':'Photos','video':'Video',
 };
 const PILL = {
@@ -604,7 +635,10 @@ const PILL = {
   class:   {bg:'#fef5e0',color:'#7a4f00'},
   type:    {bg:'#eaf2e8',color:'#2a5a28'},
 };
+// Owner email — has delete permission in addition to admin
+const OWNER_EMAIL = 'thomas.walsh@atlantiscs.org';
 function tagCat(t){ for(const[c,l] of Object.entries(TAGS)) if(l.includes(t)) return c; return 'event'; }
+function isOwner(){ return currentUser && currentUser.email === OWNER_EMAIL; }
 
 // ── STATE ─────────────────────────────────────────────────────
 let currentUser   = null;
@@ -810,12 +844,14 @@ window.openLightbox = function(id) {
   }).join('');
 
   const actions = document.getElementById('lbActions');
+  const canDelete = isOwner();
+  const deleteBtn = canDelete ? `<button class="btn-del" onclick="deletePhoto('${p.id}')">🗑 Delete</button>` : '';
   if (currentUser && p.cloudinaryUrl && !isDrive(p)) {
     actions.innerHTML = `<a class="btn-dl" href="${p.cloudinaryUrl}" download="${p.title||'media'}" target="_blank">⬇ Download</a>
-      <button class="btn-cl" onclick="closeLightbox()">Close</button>`;
+      <button class="btn-cl" onclick="closeLightbox()">Close</button>${deleteBtn}`;
   } else if (currentUser && isDrive(p)) {
     actions.innerHTML = `<a class="btn-dl" href="https://drive.google.com/uc?export=download&id=${p.driveId}" target="_blank">⬇ Download from Drive</a>
-      <button class="btn-cl" onclick="closeLightbox()">Close</button>`;
+      <button class="btn-cl" onclick="closeLightbox()">Close</button>${deleteBtn}`;
   } else {
     actions.innerHTML = `<button class="btn-dl" onclick="closeLightbox();openModal('login')">Log In to Download</button>
       <button class="btn-cl" onclick="closeLightbox()">Close</button>`;
@@ -824,6 +860,19 @@ window.openLightbox = function(id) {
 };
 window.closeLightbox    = function() { document.getElementById('lightbox').classList.remove('open'); };
 window.closeLightboxBg  = function(e) { if(e.target===document.getElementById('lightbox')) closeLightbox(); };
+
+// ── DELETE (owner only) ───────────────────────────────────────
+window.deletePhoto = async function(id) {
+  if (!isOwner()) { alert('Delete permission required.'); return; }
+  if (!confirm('Permanently delete this photo? This cannot be undone.')) return;
+  try {
+    await deleteDoc(doc(db,'photos',id));
+    closeLightbox();
+    await loadPhotos();
+  } catch(e) {
+    alert('Delete failed: ' + e.message);
+  }
+};
 
 // ── UPLOAD ─────────────────────────────────────────────────────
 // pendingFiles is a unified array of either:
@@ -840,13 +889,46 @@ function buildTagGrid() {
       <div class="tag-chips">${tagList.map(tag=>`
         <button class="t-chip" data-tag="${tag}" onclick="toggleUploadTag('${tag}',this)">${TAG_LABELS[tag]||tag}</button>
       `).join('')}</div>
-    </div>`).join('');
+    </div>`).join('') +
+  `<div class="tag-row">
+    <span class="tag-row-label">Custom</span>
+    <div class="tag-chips" style="align-items:center;gap:8px;">
+      <input type="text" id="customTagInput" class="up-input" style="width:180px;padding:5px 10px;font-size:12px;" placeholder="e.g. field-trip">
+      <button class="t-chip" style="border-radius:var(--r);padding:5px 14px;" onclick="addCustomTag()">+ Add</button>
+      <span style="font-size:12px;color:var(--muted);">lowercase, use hyphens for spaces</span>
+    </div>
+  </div>
+  <div id="customTagChips" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;padding-left:88px;"></div>`;
 }
 
 window.toggleUploadTag = function(tag, btn) {
   btn.classList.toggle('selected');
   btn.classList.contains('selected') ? selectedTags.add(tag) : selectedTags.delete(tag);
   document.getElementById('tagReq').style.display = 'none';
+};
+
+window.addCustomTag = function() {
+  const input = document.getElementById('customTagInput');
+  if (!input) return;
+  const raw = input.value.trim().toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
+  if (!raw) return;
+  if (selectedTags.has(raw)) { input.value=''; return; }
+  selectedTags.add(raw);
+  input.value='';
+  document.getElementById('tagReq').style.display='none';
+  const container = document.getElementById('customTagChips');
+  if (!container) return;
+  const chip = document.createElement('span');
+  chip.dataset.tag = raw;
+  chip.style.cssText = 'display:inline-flex;align-items:center;gap:5px;font-family:Dosis,sans-serif;font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;background:var(--blue);color:var(--white);padding:5px 10px;border-radius:20px;';
+  chip.innerHTML = raw + ' <button style="background:none;border:none;color:rgba(255,255,255,.7);cursor:pointer;font-size:13px;padding:0;line-height:1;" onclick="removeCustomTag('' + raw + '')">x</button>';
+  container.appendChild(chip);
+};
+
+window.removeCustomTag = function(tag) {
+  selectedTags.delete(tag);
+  const chip = document.querySelector('#customTagChips [data-tag="' + tag + '"]');
+  if (chip) chip.remove();
 };
 
 // drag & drop on whole page
@@ -859,11 +941,24 @@ document.body.addEventListener('drop', e => {
 });
 document.getElementById('fileInput').addEventListener('change', e => addLocalFiles(e.target.files));
 
+const MAX_FILE_BYTES = 10 * 1024 * 1024; // 10MB Cloudinary free tier limit
+
 function addLocalFiles(fl) {
+  const oversized = [];
   [...fl].forEach(f => {
+    if (f.size > MAX_FILE_BYTES) {
+      oversized.push(f.name + ' (' + (f.size/1024/1024).toFixed(1) + 'MB)');
+      return;
+    }
     if (!pendingFiles.find(x => x.source==='local' && x.file.name===f.name && x.file.size===f.size))
       pendingFiles.push({ source:'local', file:f });
   });
+  if (oversized.length) {
+    const result = document.getElementById('uploadResult');
+    result.className     = 'upload-result error';
+    result.textContent   = '\u26a0 ' + oversized.length + ' file' + (oversized.length!==1?'s':'') + ' skipped — over 10MB limit: ' + oversized.join(', ') + '. Please compress or resize before uploading.';
+    result.style.display = 'block';
+  }
   renderFileList();
 }
 
