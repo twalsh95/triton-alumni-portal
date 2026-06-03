@@ -372,7 +372,6 @@ footer small{font-size:12px;color:rgba(183,213,230,.45);}
   <div class="nav-links">
     <span class="nav-link active" id="nl-home"          onclick="goTo('home')">Gallery</span>
     <span class="nav-link"        id="nl-announcements" onclick="goTo('announcements')">Announcements</span>
-    <span class="nav-link"        id="nl-board"         onclick="goTo('board')">Board</span>
     <span class="nav-link"        id="nl-profiles"      onclick="goTo('profiles')">Profiles</span>
   </div>
   <div class="nav-auth" id="navAuth">
@@ -384,6 +383,7 @@ footer small{font-size:12px;color:rgba(183,213,230,.45);}
     <span class="nav-username" id="navUsername"></span>
     <span class="admin-badge" id="navAdminBadge" style="display:none;">Admin</span>
     <button class="btn-nl" id="uploadNavBtn" style="display:none;" onclick="goTo('upload')">+ Upload</button>
+    <button class="btn-nl" id="adminNavBtn"  style="display:none;" onclick="goTo('admin')">⚙ Admin</button>
     <button class="btn-signout" onclick="signOut()">Sign Out</button>
   </div>
 </nav>
@@ -785,6 +785,53 @@ footer small{font-size:12px;color:rgba(183,213,230,.45);}
   </div>
 </div>
 
+
+<!-- ═══ VIEW: ADMIN TOOLS ═══ -->
+<div class="view" id="view-admin">
+  <main>
+    <div class="sec-hdr" style="margin-bottom:32px;">
+      <div>
+        <p class="sec-ey">Administrator</p>
+        <h2 class="sec-title">Admin Tools</h2>
+      </div>
+    </div>
+
+    <!-- JOIN CODES -->
+    <div class="upload-panel" style="margin-bottom:28px;">
+      <h3 style="font-family:'Dosis',sans-serif;font-weight:800;font-size:18px;color:var(--blue);margin-bottom:6px;">Join Codes</h3>
+      <p style="font-size:14px;color:var(--muted);margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--gl);">Share these codes with new users to give them access. Class codes automatically assign a graduation year.</p>
+      <div id="joinCodesList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;">
+        <div class="spinner"><div class="spinner-ring"></div></div>
+      </div>
+    </div>
+
+    <!-- USER LIST -->
+    <div class="upload-panel">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+        <h3 style="font-family:'Dosis',sans-serif;font-weight:800;font-size:18px;color:var(--blue);">Registered Users</h3>
+        <span id="userCount" style="font-family:'Dosis',sans-serif;font-weight:700;font-size:13px;color:var(--muted);"></span>
+      </div>
+      <p style="font-size:14px;color:var(--muted);margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--gl);">All accounts that have registered using a join code.</p>
+      <div style="overflow-x:auto;">
+        <table id="userTable" style="width:100%;border-collapse:collapse;font-size:14px;">
+          <thead>
+            <tr style="border-bottom:2px solid var(--gl);">
+              <th style="text-align:left;padding:8px 12px;font-family:'Dosis',sans-serif;font-weight:700;font-size:11px;letter-spacing:.10em;text-transform:uppercase;color:var(--muted);">Name</th>
+              <th style="text-align:left;padding:8px 12px;font-family:'Dosis',sans-serif;font-weight:700;font-size:11px;letter-spacing:.10em;text-transform:uppercase;color:var(--muted);">Email</th>
+              <th style="text-align:left;padding:8px 12px;font-family:'Dosis',sans-serif;font-weight:700;font-size:11px;letter-spacing:.10em;text-transform:uppercase;color:var(--muted);">Role</th>
+              <th style="text-align:left;padding:8px 12px;font-family:'Dosis',sans-serif;font-weight:700;font-size:11px;letter-spacing:.10em;text-transform:uppercase;color:var(--muted);">Class Year</th>
+              <th style="text-align:left;padding:8px 12px;font-family:'Dosis',sans-serif;font-weight:700;font-size:11px;letter-spacing:.10em;text-transform:uppercase;color:var(--muted);">Joined</th>
+            </tr>
+          </thead>
+          <tbody id="userTableBody">
+            <tr><td colspan="5" style="text-align:center;padding:32px;color:var(--muted);">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
 <!-- LIGHTBOX -->
 <div class="lightbox" id="lightbox" onclick="closeLightboxBg(event)">
   <div class="lb-inner">
@@ -792,7 +839,24 @@ footer small{font-size:12px;color:rgba(183,213,230,.45);}
     <div class="lb-meta">
       <p class="lb-title" id="lbTitle">—</p>
       <p class="lb-date"  id="lbDate">—</p>
-      <div class="lb-tags" id="lbTags"></div>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+        <div class="lb-tags" id="lbTags" style="margin-bottom:0;"></div>
+        <button class="lb-edit-tags-btn" id="lbEditTagsBtn" style="display:none;" onclick="toggleTagEditor()">✎ Edit Tags</button>
+      </div>
+      <!-- inline tag editor — hidden by default -->
+      <div id="lbTagEditor" style="display:none;background:rgba(0,0,0,.2);border-radius:var(--r);padding:14px;margin-bottom:14px;">
+        <p style="font-family:'Dosis',sans-serif;font-weight:700;font-size:11px;letter-spacing:.10em;text-transform:uppercase;color:var(--aqua);margin-bottom:10px;">Edit Tags</p>
+        <div id="lbTagEditorChips" style="display:flex;flex-direction:column;gap:10px;"></div>
+        <div style="display:flex;gap:8px;margin-top:12px;align-items:center;">
+          <input type="text" id="lbCustomTagInput" placeholder="Custom tag…"
+            style="flex:1;padding:7px 10px;border:1.5px solid rgba(255,255,255,.2);border-radius:var(--r);background:rgba(255,255,255,.08);color:var(--white);font-size:12px;outline:none;">
+          <button onclick="addLbCustomTag()" style="font-family:'Dosis',sans-serif;font-weight:700;font-size:11px;letter-spacing:.06em;text-transform:uppercase;background:rgba(255,255,255,.15);color:var(--white);border:none;padding:7px 12px;border-radius:var(--r);cursor:pointer;">+ Add</button>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:12px;">
+          <button onclick="saveTagEdits()" style="font-family:'Dosis',sans-serif;font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;background:var(--gold);color:var(--blue);border:none;padding:9px 20px;border-radius:var(--r);cursor:pointer;">Save Tags</button>
+          <button onclick="toggleTagEditor()" style="font-family:'Dosis',sans-serif;font-weight:600;font-size:13px;letter-spacing:.06em;text-transform:uppercase;background:rgba(255,255,255,.1);color:var(--white);border:1px solid rgba(255,255,255,.2);padding:9px 16px;border-radius:var(--r);cursor:pointer;">Cancel</button>
+        </div>
+      </div>
       <div class="lb-actions" id="lbActions"></div>
     </div>
   </div>
@@ -1033,6 +1097,7 @@ onAuthStateChanged(auth, async user => {
 function showGuestNav() {
   document.getElementById('navAuth').style.display = 'flex';
   document.getElementById('navUser').style.display = 'none';
+  const _abn = document.getElementById('adminNavBtn'); if (_abn) _abn.style.display='none';
   document.getElementById('heroActions').innerHTML = `
     <button class="btn-p" onclick="openModal('signup')">Create Your Account</button>
     <button class="btn-g" onclick="openModal('login')">I Already Have Access</button>`;
@@ -1046,6 +1111,7 @@ function showUserNav(name, role) {
   const isAdmin = role === 'admin';
   document.getElementById('navAdminBadge').style.display = isAdmin ? 'inline-block' : 'none';
   document.getElementById('uploadNavBtn').style.display  = isAdmin ? 'inline-block' : 'none';
+  document.getElementById('adminNavBtn').style.display   = isAdmin ? 'inline-block' : 'none';
   document.getElementById('heroActions').innerHTML = `
     <button class="btn-p" onclick="goTo('all')">Browse All Media</button>
     <button class="btn-g" onclick="goTo('home')">View Albums</button>`;
@@ -1200,6 +1266,7 @@ window.clearFilters = function() {
 // ── LIGHTBOX ───────────────────────────────────────────────────
 window.openLightbox = function(id) {
   const p = allPhotos.find(x=>x.id===id); if(!p) return;
+  lbEditingPhotoId = id;
   const med = document.getElementById('lbMedia');
 
   if (p.source === 'embed') {
@@ -1240,6 +1307,15 @@ window.openLightbox = function(id) {
     actions.innerHTML = `<button class="btn-dl" onclick="closeLightbox();openModal('login')">Log In to Download</button>
       <button class="btn-cl" onclick="closeLightbox()">Close</button>`;
   }
+  // Show edit tags button for admins and owner
+  const editTagsBtn = document.getElementById('lbEditTagsBtn');
+  if (editTagsBtn) {
+    editTagsBtn.style.display = (userRole === 'admin' || isOwner()) ? 'inline-block' : 'none';
+  }
+  // Hide tag editor if open from previous
+  const editor = document.getElementById('lbTagEditor');
+  if (editor) editor.style.display = 'none';
+
   document.getElementById('lightbox').classList.add('open');
 };
 window.closeLightbox    = function() { document.getElementById('lightbox').classList.remove('open'); };
@@ -1294,7 +1370,7 @@ window.toggleUploadTag = function(tag, btn) {
 window.addCustomTag = function() {
   const input = document.getElementById('customTagInput');
   if (!input) return;
-  const raw = input.value.trim().toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
+  const raw = input.value.trim().toLowerCase().replace(/[\s]+/g,'-').replace(/[^a-z0-9-]/g,'');
   if (!raw) return;
   if (selectedTags.has(raw)) { input.value=''; return; }
   selectedTags.add(raw);
@@ -1628,19 +1704,205 @@ function authMsg(code) {
   }[code] || 'Something went wrong. Please try again.';
 }
 
+// ══════════════════════════════════════════════════════════════
+// ── ADMIN TOOLS ──────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════
+
+async function loadAdminTools() {
+  if (userRole !== 'admin') return;
+  loadJoinCodes();
+  loadUserList();
+}
+
+async function loadJoinCodes() {
+  const el = document.getElementById('joinCodesList');
+  if (!el) return;
+  try {
+    const snap  = await getDoc(doc(db,'settings','joinCodes'));
+    if (!snap.exists()) { el.innerHTML='<p style="color:var(--muted);">No join codes found.</p>'; return; }
+    const codes = snap.data();
+
+    // Build display — admin first, then student, then class years
+    const entries = [];
+    if (codes.admin)   entries.push({ label:'Admin',           code: codes.admin,   color:'#fef5e0', textColor:'#7a4f00' });
+    if (codes.student) entries.push({ label:'Generic Student', code: codes.student, color:'#e6edf5', textColor:'#0a3d6e' });
+
+    // Class year codes
+    for (let yr = 2015; yr <= 2035; yr++) {
+      const key = 'class'+yr;
+      if (codes[key]) entries.push({ label:'Class of '+yr, code: codes[key], color:'#e0f0f2', textColor:'#0b4a52' });
+    }
+
+    el.innerHTML = entries.map(e => `
+      <div style="background:${e.color};border-radius:var(--r);padding:12px 16px;">
+        <div style="font-family:'Dosis',sans-serif;font-weight:700;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:${e.textColor};margin-bottom:4px;">${e.label}</div>
+        <div style="font-family:'Dosis',sans-serif;font-weight:800;font-size:18px;color:${e.textColor};letter-spacing:.08em;">${e.code}</div>
+      </div>`).join('');
+  } catch(e) {
+    if (el) el.innerHTML = `<p style="color:#c0392b;">Error loading codes: ${e.message}</p>`;
+  }
+}
+
+async function loadUserList() {
+  const tbody = document.getElementById('userTableBody');
+  const count = document.getElementById('userCount');
+  if (!tbody) return;
+  try {
+    const snap  = await getDocs(collection(db,'users'));
+    const users = snap.docs.map(d => ({id:d.id,...d.data()}))
+      .sort((a,b) => (a.name||'').localeCompare(b.name||''));
+
+    if (count) count.textContent = users.length + ' user' + (users.length!==1?'s':'');
+
+    if (!users.length) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:32px;color:var(--muted);">No users yet.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = users.map(u => {
+      const joined = u.joinedAt?.toDate
+        ? u.joinedAt.toDate().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})
+        : '—';
+      const roleBadge = u.role === 'admin'
+        ? `<span style="background:#fef5e0;color:#7a4f00;font-family:'Dosis',sans-serif;font-weight:700;font-size:10px;letter-spacing:.10em;text-transform:uppercase;padding:2px 7px;border-radius:3px;">Admin</span>`
+        : `<span style="background:#e6edf5;color:#0a3d6e;font-family:'Dosis',sans-serif;font-weight:700;font-size:10px;letter-spacing:.10em;text-transform:uppercase;padding:2px 7px;border-radius:3px;">Student</span>`;
+      return `<tr style="border-bottom:1px solid var(--gl);">
+        <td style="padding:10px 12px;font-weight:600;color:var(--blue);">${u.name||'—'}</td>
+        <td style="padding:10px 12px;color:var(--muted);">${u.email||'—'}</td>
+        <td style="padding:10px 12px;">${roleBadge}</td>
+        <td style="padding:10px 12px;color:var(--muted);">${u.gradYear ? 'Class of '+u.gradYear : '—'}</td>
+        <td style="padding:10px 12px;color:var(--muted);">${joined}</td>
+      </tr>`;
+    }).join('');
+  } catch(e) {
+    if (tbody) tbody.innerHTML = `<tr><td colspan="5" style="color:#c0392b;padding:16px;">Error: ${e.message}</td></tr>`;
+  }
+}
+
+// ── TAG EDITOR (lightbox) ─────────────────────────────────────
+let lbEditingPhotoId = null;
+let lbEditingTags    = new Set();
+
+window.toggleTagEditor = function() {
+  const editor = document.getElementById('lbTagEditor');
+  if (!editor) return;
+  const isOpen = editor.style.display !== 'none';
+  if (isOpen) {
+    editor.style.display = 'none';
+    return;
+  }
+  // Build tag editor chips from current photo tags
+  const photo = allPhotos.find(p => p.id === lbEditingPhotoId);
+  if (!photo) return;
+  lbEditingTags = new Set(photo.tags || []);
+  renderLbTagEditor();
+  editor.style.display = 'block';
+};
+
+function renderLbTagEditor() {
+  const container = document.getElementById('lbTagEditorChips');
+  if (!container) return;
+  container.innerHTML = Object.entries(TAGS).map(([cat, tagList]) => {
+    const chips = tagList.map(tag => {
+      const active = lbEditingTags.has(tag);
+      return `<button onclick="toggleLbTag('${tag}',this)"
+        style="font-family:'Dosis',sans-serif;font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+               padding:4px 11px;border-radius:20px;cursor:pointer;transition:all .15s;
+               background:${active ? 'var(--gold)' : 'rgba(255,255,255,.1)'};
+               color:${active ? 'var(--blue)' : 'var(--aqua)'};
+               border:1.5px solid ${active ? 'var(--gold)' : 'rgba(255,255,255,.2)'};">
+        ${TAG_LABELS[tag]||tag}
+      </button>`;
+    }).join('');
+    return `<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+      <span style="font-family:'Dosis',sans-serif;font-weight:700;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(183,213,230,.6);min-width:64px;">${cat}</span>
+      ${chips}
+    </div>`;
+  }).join('');
+
+  // Show any custom tags not in taxonomy
+  const customTags = [...lbEditingTags].filter(t => !Object.values(TAGS).flat().includes(t));
+  if (customTags.length) {
+    const customChips = customTags.map(tag =>
+      `<button onclick="toggleLbTag('${tag}',this)"
+        style="font-family:'Dosis',sans-serif;font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+               padding:4px 11px;border-radius:20px;cursor:pointer;
+               background:var(--gold);color:var(--blue);border:1.5px solid var(--gold);">
+        ${tag}
+      </button>`
+    ).join('');
+    container.innerHTML += `<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+      <span style="font-family:'Dosis',sans-serif;font-weight:700;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(183,213,230,.6);min-width:64px;">custom</span>
+      ${customChips}
+    </div>`;
+  }
+}
+
+window.toggleLbTag = function(tag, btn) {
+  if (lbEditingTags.has(tag)) {
+    lbEditingTags.delete(tag);
+    btn.style.background = 'rgba(255,255,255,.1)';
+    btn.style.color      = 'var(--aqua)';
+    btn.style.borderColor= 'rgba(255,255,255,.2)';
+  } else {
+    lbEditingTags.add(tag);
+    btn.style.background = 'var(--gold)';
+    btn.style.color      = 'var(--blue)';
+    btn.style.borderColor= 'var(--gold)';
+  }
+};
+
+window.addLbCustomTag = function() {
+  const input = document.getElementById('lbCustomTagInput');
+  if (!input) return;
+  const raw = input.value.trim().toLowerCase().replace(/[\s]+/g,'-').replace(/[^a-z0-9-]/g,'');
+  if (!raw || lbEditingTags.has(raw)) { input.value=''; return; }
+  lbEditingTags.add(raw);
+  input.value = '';
+  renderLbTagEditor();
+};
+
+window.saveTagEdits = async function() {
+  if (!lbEditingPhotoId) return;
+  if (!lbEditingTags.size) {
+    alert('A photo must have at least one tag.');
+    return;
+  }
+  try {
+    await updateDoc(doc(db,'photos',lbEditingPhotoId), { tags: [...lbEditingTags] });
+    // Update local cache
+    const photo = allPhotos.find(p => p.id === lbEditingPhotoId);
+    if (photo) photo.tags = [...lbEditingTags];
+    // Refresh tag display in lightbox
+    document.getElementById('lbTags').innerHTML = [...lbEditingTags].map(t => {
+      const cat = tagCat(t), pill = PILL[cat]||PILL.event;
+      return `<span class="lb-tag" style="background:${pill.bg};color:${pill.color};">${TAG_LABELS[t]||t}</span>`;
+    }).join('');
+    // Close editor
+    document.getElementById('lbTagEditor').style.display = 'none';
+    // Refresh gallery
+    renderAlbumIndex();
+    buildSidebar();
+    renderAllPhotos();
+  } catch(e) {
+    alert('Save failed: '+e.message);
+  }
+};
+
 // ── ROUTING ────────────────────────────────────────────────────
 window.goTo = function(dest) {
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   const view = document.getElementById('view-'+dest);
   if (view) view.classList.add('active');
   // update nav active state
-  ['home','announcements','board','profiles'].forEach(n => {
+  ['home','announcements','profiles'].forEach(n => {
     const el = document.getElementById('nl-'+n);
     if (el) el.classList.toggle('active', n===dest);
   });
   if (dest==='all')           { clearFilters(); renderAllPhotos(); }
   if (dest==='upload')        { buildTagGrid(); }
   if (dest==='announcements') { loadAnnouncements(); }
+  if (dest==='admin')         { loadAdminTools(); }
   if (dest==='profiles')      {
     loadProfiles();
     const epb = document.getElementById('editProfileBtn');
