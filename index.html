@@ -276,6 +276,86 @@ footer{background:var(--blue);color:var(--aqua);padding:28px 32px;text-align:cen
 .footer-wm{font-family:'Dosis',sans-serif;font-weight:800;font-size:16px;letter-spacing:.12em;text-transform:uppercase;color:var(--white);margin-bottom:4px;}
 .footer-line{width:48px;height:3px;background:var(--gold);margin:12px auto;border-radius:2px;}
 footer small{font-size:12px;color:rgba(183,213,230,.45);}
+
+/* ── ANNOUNCEMENTS ── */
+.ann-card{background:var(--white);border-radius:var(--rl);box-shadow:var(--sc);overflow:hidden;transition:box-shadow .2s;}
+.ann-card:hover{box-shadow:var(--sh);}
+.ann-card-header{padding:20px 24px 0;}
+.ann-priority{display:inline-block;font-family:'Dosis',sans-serif;font-weight:800;font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:3px 9px;border-radius:3px;margin-bottom:10px;}
+.ann-priority.info{background:#e6edf5;color:#0a3d6e;}
+.ann-priority.important{background:#fff3cd;color:#856404;}
+.ann-priority.urgent{background:#fce8e8;color:#8b1a1a;}
+.ann-card-title{font-family:'Dosis',sans-serif;font-weight:800;font-size:20px;color:var(--blue);margin-bottom:6px;}
+.ann-card-meta{font-size:13px;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:12px;}
+.ann-card-body{padding:0 24px 16px;font-size:15px;color:var(--text);line-height:1.65;white-space:pre-wrap;}
+.ann-card-footer{padding:12px 24px;border-top:1px solid var(--gl);display:flex;align-items:center;gap:12px;}
+.ann-link-btn{font-family:'Dosis',sans-serif;font-weight:600;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);text-decoration:none;padding:5px 12px;border:1.5px solid var(--blue);border-radius:var(--r);transition:all .18s;display:inline-block;}
+.ann-link-btn:hover{background:var(--blue);color:var(--white);}
+.ann-gallery-btn{font-family:'Dosis',sans-serif;font-weight:600;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);text-decoration:none;padding:5px 12px;border:1.5px solid var(--gold);border-radius:var(--r);transition:all .18s;background:none;cursor:pointer;}
+.ann-gallery-btn:hover{background:var(--gold);color:var(--blue);}
+.like-btn{font-family:'Dosis',sans-serif;font-weight:700;font-size:12px;letter-spacing:.04em;background:none;border:1.5px solid var(--gl);color:var(--muted);padding:5px 12px;border-radius:20px;transition:all .18s;display:flex;align-items:center;gap:5px;}
+.like-btn:hover{border-color:var(--gold);color:var(--gold);}
+.like-btn.liked{background:var(--gold);color:var(--blue);border-color:var(--gold);}
+.ann-delete-btn{margin-left:auto;font-family:'Dosis',sans-serif;font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;background:none;border:none;color:var(--gray);transition:color .18s;padding:4px 8px;}
+.ann-delete-btn:hover{color:#c0392b;}
+
+/* home announcement strip for latest */
+.home-ann-grid{display:flex;flex-direction:column;gap:14px;margin-bottom:48px;}
+.home-ann-item{background:var(--white);border-radius:var(--r);padding:14px 18px;box-shadow:var(--sc);display:flex;align-items:flex-start;gap:14px;cursor:pointer;transition:box-shadow .18s;}
+.home-ann-item:hover{box-shadow:var(--sh);}
+.home-ann-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+.home-ann-dot.info{background:#4285f4;}
+.home-ann-dot.important{background:#f6a800;}
+.home-ann-dot.urgent{background:#c0392b;}
+.home-ann-dot.none{background:var(--aqua);}
+.home-ann-text{flex:1;}
+.home-ann-title{font-family:'Dosis',sans-serif;font-weight:700;font-size:15px;color:var(--blue);margin-bottom:2px;}
+.home-ann-date{font-size:12px;color:var(--muted);}
+.home-ann-more{text-align:center;padding:4px 0 8px;}
+.home-ann-more span{font-family:'Dosis',sans-serif;font-weight:600;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);cursor:pointer;}
+.home-ann-more span:hover{text-decoration:underline;}
+
+/* ── PROFILES ── */
+.profile-year-section{margin-bottom:48px;}
+.profile-year-title{font-family:'Dosis',sans-serif;font-weight:800;font-size:22px;color:var(--blue);padding-bottom:10px;border-bottom:2px solid var(--gl);margin-bottom:20px;}
+.profile-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;}
+.profile-card{background:var(--white);border-radius:var(--rl);box-shadow:var(--sc);overflow:hidden;cursor:pointer;transition:transform .18s,box-shadow .18s;}
+.profile-card:hover{transform:translateY(-3px);box-shadow:var(--sh);}
+.profile-card-photo{width:100%;aspect-ratio:1;background:var(--blue);position:relative;overflow:hidden;}
+.profile-card-photo img{width:100%;height:100%;object-fit:cover;}
+.profile-card-photo .profile-initials{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Dosis',sans-serif;font-weight:800;font-size:36px;color:var(--gold);}
+.profile-card-meta{padding:12px 14px;}
+.profile-card-name{font-family:'Dosis',sans-serif;font-weight:700;font-size:15px;color:var(--blue);margin-bottom:2px;}
+.profile-card-sub{font-size:12px;color:var(--muted);}
+
+/* profile detail page */
+.profile-detail{display:grid;grid-template-columns:280px 1fr;gap:32px;align-items:start;}
+.profile-detail-sidebar{background:var(--white);border-radius:var(--rl);box-shadow:var(--sc);overflow:hidden;}
+.profile-detail-photo{width:100%;aspect-ratio:1;background:var(--blue);position:relative;overflow:hidden;}
+.profile-detail-photo img{width:100%;height:100%;object-fit:cover;}
+.profile-detail-photo .profile-initials{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Dosis',sans-serif;font-weight:800;font-size:56px;color:var(--gold);}
+.profile-detail-info{padding:20px;}
+.profile-detail-name{font-family:'Dosis',sans-serif;font-weight:800;font-size:22px;color:var(--blue);margin-bottom:4px;}
+.profile-detail-year{font-family:'Dosis',sans-serif;font-weight:600;font-size:12px;letter-spacing:.10em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+.profile-detail-sub{font-size:14px;color:var(--muted);line-height:1.5;}
+.profile-qa-card{background:var(--white);border-radius:var(--rl);box-shadow:var(--sc);padding:28px 32px;}
+.profile-qa-item{margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--gl);}
+.profile-qa-item:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none;}
+.profile-qa-q{font-family:'Dosis',sans-serif;font-weight:700;font-size:12px;letter-spacing:.10em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;}
+.profile-qa-a{font-size:15px;color:var(--text);line-height:1.65;}
+
+/* teacher profile announcements pinboard */
+.pinboard{background:var(--off);border-radius:var(--rl);padding:20px 24px;margin-top:24px;}
+.pinboard-title{font-family:'Dosis',sans-serif;font-weight:800;font-size:16px;color:var(--blue);margin-bottom:14px;}
+.pin-item{background:var(--white);border-radius:var(--r);padding:12px 16px;margin-bottom:10px;box-shadow:var(--sc);}
+.pin-item-title{font-family:'Dosis',sans-serif;font-weight:700;font-size:14px;color:var(--blue);margin-bottom:3px;}
+.pin-item-body{font-size:13px;color:var(--muted);line-height:1.5;}
+.pin-post-btn{font-family:'Dosis',sans-serif;font-weight:700;font-size:12px;letter-spacing:.06em;text-transform:uppercase;background:var(--blue);color:var(--white);border:none;padding:8px 16px;border-radius:var(--r);margin-top:8px;transition:all .2s;}
+.pin-post-btn:hover{background:var(--blue-light);}
+
+.empty-state{text-align:center;padding:56px 24px;color:var(--muted);}
+.empty-state h3{font-family:'Dosis',sans-serif;font-weight:700;font-size:20px;color:var(--blue);margin-bottom:8px;}
+
 </style>
 </head>
 <body>
@@ -290,10 +370,10 @@ footer small{font-size:12px;color:rgba(183,213,230,.45);}
     </div>
   </div>
   <div class="nav-links">
-    <span class="nav-link active" onclick="goTo('home')">Gallery</span>
-    <span class="nav-link">Announcements</span>
-    <span class="nav-link">Board</span>
-    <span class="nav-link">Profiles</span>
+    <span class="nav-link active" id="nl-home"          onclick="goTo('home')">Gallery</span>
+    <span class="nav-link"        id="nl-announcements" onclick="goTo('announcements')">Announcements</span>
+    <span class="nav-link"        id="nl-board"         onclick="goTo('board')">Board</span>
+    <span class="nav-link"        id="nl-profiles"      onclick="goTo('profiles')">Profiles</span>
   </div>
   <div class="nav-auth" id="navAuth">
     <button class="btn-nl" onclick="openModal('login')">Log In</button>
@@ -323,10 +403,8 @@ footer small{font-size:12px;color:rgba(183,213,230,.45);}
     <div class="hero-sweep"></div>
   </section>
   <main>
-    <div class="announce">
-      <span class="ann-label">Welcome</span>
-      <p class="ann-text"><strong>Triton Alumni Portal is live.</strong> Sign up with your join code to access and download photos and videos from your time at ACS.</p>
-    </div>
+    <!-- Latest announcements strip -->
+    <div id="homeAnnGrid" class="home-ann-grid" style="display:none;"></div>
     <div class="sec-hdr">
       <div>
         <p class="sec-ey">Browse by Album</p>
@@ -501,6 +579,173 @@ footer small{font-size:12px;color:rgba(183,213,230,.45);}
   </main>
 </div>
 
+
+<!-- ═══ VIEW: ANNOUNCEMENTS ═══ -->
+<div class="view" id="view-announcements">
+  <main>
+    <div class="sec-hdr" style="margin-bottom:24px;">
+      <div>
+        <p class="sec-ey">Latest News</p>
+        <h2 class="sec-title">Announcements</h2>
+      </div>
+      <button class="sec-link" id="newAnnBtn" style="display:none;" onclick="openAnnModal()">+ New Announcement</button>
+    </div>
+    <div id="annList" style="display:flex;flex-direction:column;gap:20px;">
+      <div class="spinner"><div class="spinner-ring"></div></div>
+    </div>
+  </main>
+</div>
+
+<!-- ═══ VIEW: PROFILES ═══ -->
+<div class="view" id="view-profiles">
+  <main>
+    <div class="sec-hdr" style="margin-bottom:24px;">
+      <div>
+        <p class="sec-ey">Alumni Directory</p>
+        <h2 class="sec-title">Profiles</h2>
+      </div>
+      <button class="sec-link" id="editProfileBtn" style="display:none;" onclick="openProfileModal('edit')">Edit My Profile</button>
+    </div>
+    <div id="profileDirectory"></div>
+  </main>
+</div>
+
+<!-- ═══ VIEW: PROFILE DETAIL ═══ -->
+<div class="view" id="view-profile-detail">
+  <main>
+    <div class="breadcrumb">
+      <span class="bc-link" onclick="goTo('profiles')">Profiles</span>
+      <span class="bc-sep">/</span>
+      <span class="bc-current" id="profileDetailName">—</span>
+    </div>
+    <div id="profileDetailContent"></div>
+  </main>
+</div>
+
+<!-- ═══ ANNOUNCEMENT COMPOSE MODAL ═══ -->
+<div class="modal-overlay" id="annModal" onclick="handleAnnOverlay(event)">
+  <div class="modal" style="max-width:560px;">
+    <div class="modal-hdr">
+      <div class="modal-logo"><div class="modal-lm">A</div><span>Triton Alumni</span></div>
+      <h2 class="modal-ttl" id="annModalTitle">New Announcement</h2>
+      <button class="modal-x" onclick="closeAnnModal()">✕</button>
+    </div>
+    <div class="modal-body" style="max-height:75vh;overflow-y:auto;">
+      <div class="fg">
+        <label class="fl">Title</label>
+        <input type="text" class="fi" id="annTitle" placeholder="Announcement title">
+      </div>
+      <div class="fg">
+        <label class="fl">Body</label>
+        <textarea class="fi" id="annBody" rows="5" style="resize:vertical;" placeholder="Write your announcement here…"></textarea>
+      </div>
+      <div class="fg">
+        <label class="fl">Link <span style="color:var(--gray);font-size:11px;font-weight:400;letter-spacing:0;margin-left:4px;">(optional)</span></label>
+        <input type="url" class="fi" id="annLink" placeholder="https://…">
+        <p class="fh">YouTube, Vimeo, Google Drive, or any external URL</p>
+      </div>
+      <div class="fg">
+        <label class="fl">Link to Gallery Album <span style="color:var(--gray);font-size:11px;font-weight:400;letter-spacing:0;margin-left:4px;">(optional)</span></label>
+        <select class="fi" id="annGalleryTag" style="background:var(--white);">
+          <option value="">— No gallery link —</option>
+        </select>
+        <p class="fh">Links directly to a gallery album from this announcement</p>
+      </div>
+      <div class="fg">
+        <label class="fl">Priority Tag</label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;" id="annPriorityChips">
+          <button class="t-chip" data-val="" onclick="selectPriority(this,'')">None</button>
+          <button class="t-chip" data-val="info" onclick="selectPriority(this,'info')">📢 Info</button>
+          <button class="t-chip" data-val="important" onclick="selectPriority(this,'important')">⚠ Important</button>
+          <button class="t-chip" data-val="urgent" onclick="selectPriority(this,'urgent')">🚨 Urgent</button>
+        </div>
+      </div>
+      <div class="auth-err" id="annErr"></div>
+      <button class="btn-sub" onclick="submitAnnouncement()">Post Announcement</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PROFILE EDIT MODAL ═══ -->
+<div class="modal-overlay" id="profileModal" onclick="handleProfileOverlay(event)">
+  <div class="modal" style="max-width:560px;">
+    <div class="modal-hdr">
+      <div class="modal-logo"><div class="modal-lm">A</div><span>Triton Alumni</span></div>
+      <h2 class="modal-ttl">My Profile</h2>
+      <button class="modal-x" onclick="closeProfileModal()">✕</button>
+    </div>
+    <div class="modal-body" style="max-height:75vh;overflow-y:auto;">
+      <div class="fg">
+        <label class="fl">Profile Photo URL <span style="color:var(--gray);font-size:11px;font-weight:400;letter-spacing:0;">(paste an image link)</span></label>
+        <input type="url" class="fi" id="profPhotoUrl" placeholder="https://…">
+        <p class="fh">Link to a photo hosted online (Google Drive, Imgur, etc.) — make sure it's set to public</p>
+      </div>
+      <div class="fg">
+        <label class="fl">Graduation Year <span style="color:#c0392b;">*</span></label>
+        <select class="fi" id="profYear" style="background:var(--white);">
+          <option value="">— Select year —</option>
+          <option>2015</option>
+          <option>2016</option>
+          <option>2017</option>
+          <option>2018</option>
+          <option>2019</option>
+          <option>2020</option>
+          <option>2021</option>
+          <option>2022</option>
+          <option>2023</option>
+          <option>2024</option>
+          <option>2025</option>
+          <option>2026</option>
+          <option>2027</option>
+          <option>2028</option>
+          <option>2029</option>
+          <option>2030</option>
+          <option>2031</option>
+          <option>2032</option>
+          <option>2033</option>
+          <option>2034</option>
+          <option>2035</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label class="fl">What are you up to now?</label>
+        <textarea class="fi" id="profNow" rows="3" style="resize:vertical;" placeholder="College, work, gap year…"></textarea>
+      </div>
+      <div class="fg">
+        <label class="fl">Where are you living?</label>
+        <input type="text" class="fi" id="profLocation" placeholder="City, State">
+      </div>
+      <div class="fg">
+        <label class="fl">What are you studying or working in?</label>
+        <input type="text" class="fi" id="profField" placeholder="Major, career field, trade…">
+      </div>
+      <div class="fg">
+        <label class="fl">Favorite memory from ACS?</label>
+        <textarea class="fi" id="profMemory" rows="3" style="resize:vertical;" placeholder="A moment, a person, an event…"></textarea>
+      </div>
+      <div class="fg">
+        <label class="fl">What advice would you give your freshman self?</label>
+        <textarea class="fi" id="profAdvice" rows="3" style="resize:vertical;"></textarea>
+      </div>
+      <div class="fg">
+        <label class="fl">What's something people would be surprised to know about you?</label>
+        <textarea class="fi" id="profSurprise" rows="2" style="resize:vertical;"></textarea>
+      </div>
+      <div class="fg">
+        <label class="fl">What does the future look like for you?</label>
+        <textarea class="fi" id="profFuture" rows="3" style="resize:vertical;" placeholder="5 years from now…"></textarea>
+      </div>
+      <div class="fg">
+        <label class="fl">Shoutouts 👋</label>
+        <textarea class="fi" id="profShoutouts" rows="2" style="resize:vertical;" placeholder="Friends, teachers, anyone you want to mention…"></textarea>
+      </div>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:16px;">Your profile will be visible to all logged-in users. Leave any field blank to skip it.</p>
+      <div class="auth-err" id="profErr"></div>
+      <button class="btn-sub" onclick="saveProfile()">Save Profile</button>
+    </div>
+  </div>
+</div>
+
 <!-- LIGHTBOX -->
 <div class="lightbox" id="lightbox" onclick="closeLightboxBg(event)">
   <div class="lb-inner">
@@ -539,8 +784,14 @@ footer small{font-size:12px;color:rgba(183,213,230,.45);}
         <div class="fg"><label class="fl">Email</label><input type="email" class="fi" id="signupEmail" placeholder="you@example.com"></div>
         <div class="fg">
           <label class="fl">Join Code</label>
-          <input type="text" class="fi" id="signupCode" placeholder="Enter your access code" style="letter-spacing:.10em;text-transform:uppercase;">
-          <p class="fh">Alumni and admin codes are issued separately.</p>
+          <input type="text" class="fi" id="signupCode" placeholder="Enter your access code"
+            style="letter-spacing:.10em;text-transform:uppercase;"
+            oninput="previewClassYear(this.value)">
+          <p class="fh">Enter the code provided by your school. Class-specific codes (e.g. SENIOR25) will automatically set your graduation year.</p>
+        </div>
+        <div class="fg" id="gradYearPreviewRow" style="display:none;">
+          <label class="fl">Graduation Year <span style="color:var(--gold);font-size:11px;font-weight:600;">✓ Detected from code</span></label>
+          <input type="text" class="fi" id="gradYearPreview" readonly style="background:var(--off);color:var(--blue);font-family:'Dosis',sans-serif;font-weight:700;letter-spacing:.08em;">
         </div>
         <div class="fg"><label class="fl">Password</label><input type="password" class="fi" id="signupPass" placeholder="At least 8 characters"></div>
         <button class="btn-sub" id="btnSignup" onclick="doSignup()">Create My Account</button>
@@ -558,8 +809,8 @@ import { getAuth, createUserWithEmailAndPassword,
          signInWithEmailAndPassword, signOut as fbOut,
          onAuthStateChanged, sendPasswordResetEmail } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getFirestore, collection, doc, getDocs,
-         getDoc, setDoc, addDoc, deleteDoc, query,
-         orderBy, serverTimestamp }                   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+         getDoc, setDoc, addDoc, deleteDoc, updateDoc,
+         query, where, orderBy, serverTimestamp }      from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const app  = initializeApp({
   apiKey:            'AIzaSyA829_Msqav6591PK5VHExyLXzqxdHx6E8',
@@ -759,6 +1010,9 @@ function showUserNav(name, role) {
   document.getElementById('heroActions').innerHTML = `
     <button class="btn-p" onclick="goTo('all')">Browse All Media</button>
     <button class="btn-g" onclick="goTo('home')">View Albums</button>`;
+  // show admin announcement button if on announcements page
+  const annBtn = document.getElementById('newAnnBtn');
+  if (annBtn) annBtn.style.display = isAdmin ? 'inline-block' : 'none';
 }
 
 // ── LOAD PHOTOS ────────────────────────────────────────────────
@@ -771,6 +1025,8 @@ async function loadPhotos() {
   renderAlbumIndex();
   buildSidebar();
   renderAllPhotos();
+  loadAnnouncements();
+  loadProfiles();
 }
 
 // ── PLACEHOLDER SVG ────────────────────────────────────────────
@@ -1235,12 +1491,25 @@ window.doSignup = async function() {
   if (!name) { err.textContent='Please enter your full name.'; err.style.display='block'; return; }
   btn.disabled=true; btn.textContent='Checking code…';
   let role = null;
+  let gradYear = null;
   try {
     const snap = await getDoc(doc(db,'settings','joinCodes'));
     if (snap.exists()) {
       const codes = snap.data();
-      if (code === codes.admin)        role = 'admin';
-      else if (code === codes.student) role = 'student';
+      if (code === (codes.admin||'').toUpperCase()) {
+        role = 'admin';
+      } else if (code === (codes.student||'').toUpperCase()) {
+        role = 'student';
+      } else {
+        // Check class year codes class2015–class2035
+        for (let yr = 2015; yr <= 2035; yr++) {
+          if (code === (codes['class'+yr]||'').toUpperCase()) {
+            role     = 'student';
+            gradYear = String(yr);
+            break;
+          }
+        }
+      }
     } else {
       err.textContent='Setup error: join codes not found. Please contact your administrator.';
       err.style.display='block'; btn.disabled=false; btn.textContent='Create My Account'; return;
@@ -1256,7 +1525,22 @@ window.doSignup = async function() {
   btn.textContent='Creating account…';
   try {
     const cred = await createUserWithEmailAndPassword(auth,email,pass);
-    await setDoc(doc(db,'users',cred.user.uid), { name, email, role, joinedAt:serverTimestamp() });
+    await setDoc(doc(db,'users',cred.user.uid), {
+      name, email, role,
+      gradYear:  gradYear || null,
+      joinedAt:  serverTimestamp(),
+    });
+    // Pre-create a minimal profile stub so user appears in directory immediately
+    if (gradYear) {
+      await setDoc(doc(db,'profiles',cred.user.uid), {
+        uid:      cred.user.uid,
+        name,
+        email,
+        role,
+        gradYear,
+        updatedAt: serverTimestamp(),
+      });
+    }
     closeModal();
   } catch(e) { err.textContent=authMsg(e.code); err.style.display='block'; }
   btn.disabled=false; btn.textContent='Create My Account';
@@ -1273,6 +1557,26 @@ window.doReset = async function(e) {
 
 window.signOut = async function() { await fbOut(auth); goTo('home'); };
 
+// Preview class year from join code as user types
+window.previewClassYear = async function(rawCode) {
+  const code = rawCode.trim().toUpperCase();
+  const row  = document.getElementById('gradYearPreviewRow');
+  const prev = document.getElementById('gradYearPreview');
+  if (!code || !row || !prev) return;
+  // Quick local check — SENIOR## pattern
+  const match = code.match(/^SENIOR([0-9]{2})$/);
+  if (match) {
+    const yr = parseInt(match[1]);
+    const fullYear = yr >= 15 && yr <= 35 ? 2000 + yr : null;
+    if (fullYear) {
+      prev.value = 'Class of ' + fullYear;
+      row.style.display = 'block';
+      return;
+    }
+  }
+  row.style.display = 'none';
+};
+
 function authMsg(code) {
   return {
     'auth/invalid-email':         'Invalid email address.',
@@ -1288,9 +1592,21 @@ function authMsg(code) {
 // ── ROUTING ────────────────────────────────────────────────────
 window.goTo = function(dest) {
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  document.getElementById('view-'+dest).classList.add('active');
-  if (dest==='all')    { clearFilters(); renderAllPhotos(); }
-  if (dest==='upload') { buildTagGrid(); }
+  const view = document.getElementById('view-'+dest);
+  if (view) view.classList.add('active');
+  // update nav active state
+  ['home','announcements','board','profiles'].forEach(n => {
+    const el = document.getElementById('nl-'+n);
+    if (el) el.classList.toggle('active', n===dest);
+  });
+  if (dest==='all')           { clearFilters(); renderAllPhotos(); }
+  if (dest==='upload')        { buildTagGrid(); }
+  if (dest==='announcements') { loadAnnouncements(); }
+  if (dest==='profiles')      {
+    loadProfiles();
+    const epb = document.getElementById('editProfileBtn');
+    if (epb) epb.style.display = currentUser ? 'inline-block' : 'none';
+  }
   window.scrollTo(0,0);
 };
 function showView(name) {
@@ -1315,6 +1631,386 @@ document.addEventListener('keydown', e => { if(e.key==='Escape') { closeModal();
 
 // defaults
 document.getElementById('upDate').valueAsDate = new Date();
+
+// ══════════════════════════════════════════════════════════════
+// ── ANNOUNCEMENTS ────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════
+
+let allAnnouncements = [];
+let annPriorityVal   = '';
+
+// Priority config
+const ANN_PRIORITY = {
+  urgent:    { label:'🚨 Urgent',    cls:'urgent' },
+  important: { label:'⚠ Important', cls:'important' },
+  info:      { label:'📢 Info',      cls:'info' },
+};
+
+async function loadAnnouncements() {
+  try {
+    const q    = query(collection(db,'announcements'), orderBy('createdAt','desc'));
+    const snap = await getDocs(q);
+    allAnnouncements = snap.docs.map(d => ({id:d.id, ...d.data()}));
+  } catch(e) { allAnnouncements = []; }
+  renderAnnouncements();
+  renderHomeAnnouncements();
+  populateGalleryTagSelect();
+}
+
+function renderAnnouncements() {
+  const el = document.getElementById('annList');
+  if (!el) return;
+  if (!allAnnouncements.length) {
+    el.innerHTML = `<div class="empty-state"><h3>No announcements yet</h3><p>Check back soon.</p></div>`;
+    return;
+  }
+  el.innerHTML = allAnnouncements.map(a => annCardHTML(a, true)).join('');
+}
+
+function renderHomeAnnouncements() {
+  const el = document.getElementById('homeAnnGrid');
+  if (!el) return;
+  const recent = allAnnouncements.slice(0,7);
+  if (!recent.length) { el.style.display='none'; return; }
+  el.style.display='block';
+  el.innerHTML = recent.map(a => {
+    const dot = a.priority || 'none';
+    const date = a.createdAt?.toDate ? a.createdAt.toDate().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '';
+    return `<div class="home-ann-item" onclick="goTo('announcements')">
+      <div class="home-ann-dot ${dot}"></div>
+      <div class="home-ann-text">
+        <div class="home-ann-title">${a.title||'Untitled'}</div>
+        <div class="home-ann-date">${date}</div>
+      </div>
+    </div>`;
+  }).join('') + (allAnnouncements.length > 7 ? `<div class="home-ann-more"><span onclick="goTo('announcements')">View all announcements →</span></div>` : '');
+}
+
+function annCardHTML(a, showDelete) {
+  const date = a.createdAt?.toDate ? a.createdAt.toDate().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) : '';
+  const pCfg = a.priority ? ANN_PRIORITY[a.priority] : null;
+  const priorityBadge = pCfg ? `<span class="ann-priority ${pCfg.cls}">${pCfg.label}</span>` : '';
+  const linkBtn = a.link ? `<a class="ann-link-btn" href="${a.link}" target="_blank">🔗 View Link</a>` : '';
+  const galleryBtn = a.galleryTag ? `<button class="ann-gallery-btn" onclick="goToAlbum('${a.galleryTag}')">📷 View in Gallery</button>` : '';
+  const deleteBtn = (showDelete && (userRole==='admin' || isOwner())) ? `<button class="ann-delete-btn" onclick="deleteAnnouncement('${a.id}')">🗑 Delete</button>` : '';
+  const liked = (a.likedBy||[]).includes(currentUser?.uid||'');
+  const likeCount = (a.likedBy||[]).length;
+  return `<div class="ann-card" id="ann-${a.id}">
+    <div class="ann-card-header">
+      ${priorityBadge}
+      <h3 class="ann-card-title">${a.title||'Untitled'}</h3>
+      <div class="ann-card-meta">
+        <span>${a.authorName||'Admin'}</span>
+        <span>·</span>
+        <span>${date}</span>
+      </div>
+    </div>
+    <div class="ann-card-body">${a.body||''}</div>
+    <div class="ann-card-footer">
+      ${currentUser ? `<button class="like-btn ${liked?'liked':''}" onclick="toggleLike('${a.id}')">♥ ${likeCount||0}</button>` : `<span style="font-size:13px;color:var(--muted);">Log in to like</span>`}
+      ${linkBtn}${galleryBtn}
+      ${deleteBtn}
+    </div>
+  </div>`;
+}
+
+window.openAnnModal = function() {
+  document.getElementById('annModal').classList.add('open');
+  document.getElementById('annTitle').value = '';
+  document.getElementById('annBody').value  = '';
+  document.getElementById('annLink').value  = '';
+  document.getElementById('annGalleryTag').value = '';
+  document.getElementById('annErr').style.display = 'none';
+  annPriorityVal = '';
+  document.querySelectorAll('#annPriorityChips .t-chip').forEach(c => c.classList.remove('selected'));
+  document.querySelector('#annPriorityChips .t-chip[data-val=""]').classList.add('selected');
+};
+window.closeAnnModal = function() { document.getElementById('annModal').classList.remove('open'); };
+window.handleAnnOverlay = function(e) { if(e.target===document.getElementById('annModal')) closeAnnModal(); };
+
+window.selectPriority = function(btn, val) {
+  annPriorityVal = val;
+  document.querySelectorAll('#annPriorityChips .t-chip').forEach(c => c.classList.remove('selected'));
+  btn.classList.add('selected');
+};
+
+window.submitAnnouncement = async function() {
+  const title = document.getElementById('annTitle').value.trim();
+  const body  = document.getElementById('annBody').value.trim();
+  const link  = document.getElementById('annLink').value.trim();
+  const gtag  = document.getElementById('annGalleryTag').value;
+  const err   = document.getElementById('annErr');
+  if (!title) { err.textContent='Please add a title.'; err.style.display='block'; return; }
+  if (!body)  { err.textContent='Please write something in the body.'; err.style.display='block'; return; }
+  err.style.display='none';
+  try {
+    const snap = await getDoc(doc(db,'users',currentUser.uid));
+    const name = snap.exists() ? snap.data().name : 'Admin';
+    await addDoc(collection(db,'announcements'), {
+      title, body,
+      link:       link  || null,
+      galleryTag: gtag  || null,
+      priority:   annPriorityVal || null,
+      authorUid:  currentUser.uid,
+      authorName: name,
+      likedBy:    [],
+      createdAt:  serverTimestamp(),
+    });
+    closeAnnModal();
+    await loadAnnouncements();
+  } catch(e) { err.textContent='Error: '+e.message; err.style.display='block'; }
+};
+
+window.deleteAnnouncement = async function(id) {
+  if (!confirm('Delete this announcement?')) return;
+  try { await deleteDoc(doc(db,'announcements',id)); await loadAnnouncements(); }
+  catch(e) { alert('Delete failed: '+e.message); }
+};
+
+window.toggleLike = async function(id) {
+  if (!currentUser) { openModal('login'); return; }
+  const uid = currentUser.uid;
+  const ann = allAnnouncements.find(a => a.id===id);
+  if (!ann) return;
+  const liked  = (ann.likedBy||[]).includes(uid);
+  const newArr = liked ? (ann.likedBy||[]).filter(x=>x!==uid) : [...(ann.likedBy||[]), uid];
+  try {
+    await updateDoc(doc(db,'announcements',id),{ likedBy: newArr });
+    ann.likedBy = newArr;
+    const card = document.getElementById('ann-'+id);
+    if (card) {
+      const btn = card.querySelector('.like-btn');
+      if (btn) { btn.className='like-btn'+(newArr.includes(uid)?' liked':''); btn.innerHTML='♥ '+newArr.length; }
+    }
+    renderHomeAnnouncements();
+  } catch(e) { console.error(e); }
+};
+
+function populateGalleryTagSelect() {
+  const sel = document.getElementById('annGalleryTag');
+  if (!sel) return;
+  // Get all unique non-type tags from photos
+  const tagSet = new Set();
+  allPhotos.forEach(p => (p.tags||[]).forEach(t => { if(!['photos','video'].includes(t)) tagSet.add(t); }));
+  const opts = [...tagSet].sort().map(t => `<option value="${t}">${TAG_LABELS[t]||t}</option>`).join('');
+  sel.innerHTML = '<option value="">— No gallery link —</option>' + opts;
+}
+
+// ══════════════════════════════════════════════════════════════
+// ── PROFILES ─────────────────────────════════════════════════
+// ══════════════════════════════════════════════════════════════
+
+let allProfiles = [];
+
+const PROFILE_QUESTIONS = [
+  { id:'now',       label:'What are you up to now?',                              rows:3 },
+  { id:'location',  label:'Where are you living?',                                rows:1 },
+  { id:'field',     label:'What are you studying or working in?',                 rows:1 },
+  { id:'memory',    label:'Favorite memory from ACS?',                            rows:3 },
+  { id:'advice',    label:'What advice would you give your freshman self?',        rows:3 },
+  { id:"surprise",  label:"What's something people would be surprised to know?", rows:2 },
+  { id:'future',    label:'What does the future look like for you?',              rows:3 },
+  { id:'shoutouts', label:'Shoutouts 👋',                                          rows:2 },
+];
+
+async function loadProfiles() {
+  try {
+    const q    = query(collection(db,'profiles'), orderBy('name','asc'));
+    const snap = await getDocs(q);
+    allProfiles = snap.docs.map(d => ({id:d.id, ...d.data()}));
+  } catch(e) { allProfiles = []; }
+  renderProfileDirectory();
+}
+
+function renderProfileDirectory() {
+  const el = document.getElementById('profileDirectory');
+  if (!el) return;
+  if (!allProfiles.length) {
+    el.innerHTML = `<div class="empty-state"><h3>No profiles yet</h3><p>Signed-in alumni can create their profile using the button above.</p></div>`;
+    return;
+  }
+  // Group by graduation year, sort years descending
+  const byYear = {};
+  allProfiles.forEach(p => {
+    const yr = p.gradYear || 'Unknown';
+    if (!byYear[yr]) byYear[yr] = [];
+    byYear[yr].push(p);
+  });
+  const sortedYears = Object.keys(byYear).sort((a,b) => b-a);
+  el.innerHTML = sortedYears.map(yr => {
+    const profiles = byYear[yr].sort((a,b) => (a.name||'').localeCompare(b.name||''));
+    return `<div class="profile-year-section">
+      <h3 class="profile-year-title">Class of ${yr}</h3>
+      <div class="profile-grid">${profiles.map(p => profileCardHTML(p)).join('')}</div>
+    </div>`;
+  }).join('');
+}
+
+function profileCardHTML(p) {
+  const initials = (p.name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const photo = p.photoUrl
+    ? `<img src="${p.photoUrl}" alt="${p.name||''}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+       <div class="profile-initials" style="display:none;">${initials}</div>`
+    : `<div class="profile-initials">${initials}</div>`;
+  const sub = [p.field, p.location].filter(Boolean).join(' · ');
+  return `<div class="profile-card" onclick="openProfileDetail('${p.id}')">
+    <div class="profile-card-photo">${photo}</div>
+    <div class="profile-card-meta">
+      <div class="profile-card-name">${p.name||'—'}</div>
+      <div class="profile-card-sub">${sub||'&nbsp;'}</div>
+    </div>
+  </div>`;
+}
+
+window.openProfileDetail = async function(id) {
+  const p = allProfiles.find(x => x.id===id);
+  if (!p) return;
+  document.getElementById('profileDetailName').textContent = p.name||'Profile';
+  const initials = (p.name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const photo = p.photoUrl
+    ? `<img src="${p.photoUrl}" alt="${p.name||''}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+       <div class="profile-initials" style="display:none;">${initials}</div>`
+    : `<div class="profile-initials">${initials}</div>`;
+
+  // Q&A section — only show answered questions
+  const qaItems = PROFILE_QUESTIONS
+    .filter(q => p[q.id])
+    .map(q => `<div class="profile-qa-item">
+      <div class="profile-qa-q">${q.label}</div>
+      <div class="profile-qa-a">${p[q.id]}</div>
+    </div>`).join('');
+
+  // Teacher pinboard
+  const isTeacher = p.role === 'admin';
+
+  // Own profile edit button
+  const isOwn = currentUser && currentUser.uid === p.uid;
+  const editBtn = isOwn ? `<button class="btn-ns" style="margin-top:12px;width:100%;" onclick="openProfileModal('edit')">Edit Profile</button>` : '';
+
+  // Pin post button for teacher on their own profile
+  const pinPostBtn = (isTeacher && isOwn) ? `<button class="pin-post-btn" onclick="openPinModal()">+ Add Pinboard Post</button>` : '';
+
+  document.getElementById('profileDetailContent').innerHTML = `
+    <div class="profile-detail">
+      <div class="profile-detail-sidebar">
+        <div class="profile-detail-photo">${photo}</div>
+        <div class="profile-detail-info">
+          <div class="profile-detail-name">${p.name||'—'}</div>
+          <div class="profile-detail-year">Class of ${p.gradYear||'—'}</div>
+          <div class="profile-detail-sub">${[p.field,p.location].filter(Boolean).join('<br>')}</div>
+          ${editBtn}
+        </div>
+      </div>
+      <div>
+        ${qaItems ? `<div class="profile-qa-card">${qaItems}</div>` : `<div class="empty-state"><h3>Profile in progress</h3><p>This alumni hasn't filled out their profile yet.</p></div>`}
+        ${isTeacher ? `<div class="pinboard" id="teacherPinboard"><div class="pinboard-title">📌 From ${(p.name||'').split(' ')[0]||'this teacher'}'s desk</div><div id="pinItems">Loading…</div>${pinPostBtn}</div>` : ''}
+      </div>
+    </div>`;
+
+  // Load pins async if teacher
+  if (isTeacher) loadPins(p.uid);
+
+  showView('profile-detail');
+};
+
+async function loadPins(uid) {
+  const el = document.getElementById('pinItems');
+  if (!el) return;
+  try {
+    const q    = query(collection(db,'pins'), where('authorUid','==',uid), orderBy('createdAt','desc'));
+    const snap = await getDocs(q);
+    const pins = snap.docs.map(d=>({id:d.id,...d.data()}));
+    if (!pins.length) { el.innerHTML='<p style="font-size:13px;color:var(--muted);">Nothing pinned yet.</p>'; return; }
+    el.innerHTML = pins.map(pin => `<div class="pin-item">
+      <div class="pin-item-title">${pin.title||''}</div>
+      <div class="pin-item-body">${pin.body||''}</div>
+      ${pin.link?`<a href="${pin.link}" target="_blank" style="font-size:12px;color:var(--blue);">🔗 Link</a>`:''}
+    </div>`).join('');
+  } catch(e) { el.innerHTML='<p style="font-size:13px;color:var(--muted);">Could not load pins.</p>'; }
+}
+
+// Pin modal (teacher pinboard posts)
+window.openPinModal = function() {
+  const title = prompt('Pin title:');
+  if (!title) return;
+  const body  = prompt('Pin message:');
+  if (!body)  return;
+  const link  = prompt('Link (optional — press Enter to skip):');
+  addPin(title, body, link||null);
+};
+
+async function addPin(title, body, link) {
+  try {
+    const snap = await getDoc(doc(db,'users',currentUser.uid));
+    const name = snap.exists() ? snap.data().name : 'Teacher';
+    await addDoc(collection(db,'pins'),{
+      title, body, link: link||null,
+      authorUid: currentUser.uid,
+      authorName: name,
+      createdAt: serverTimestamp(),
+    });
+    loadPins(currentUser.uid);
+  } catch(e) { alert('Error: '+e.message); }
+}
+
+// Profile modal
+window.openProfileModal = async function(mode) {
+  document.getElementById('profileModal').classList.add('open');
+  document.getElementById('profErr').style.display = 'none';
+  if (mode === 'edit' && currentUser) {
+    // Pre-fill with existing profile
+    const existing = allProfiles.find(p => p.uid === currentUser.uid);
+    if (existing) {
+      document.getElementById('profPhotoUrl').value  = existing.photoUrl  || '';
+      document.getElementById('profYear').value      = existing.gradYear  || '';
+      document.getElementById('profNow').value       = existing.now       || '';
+      document.getElementById('profLocation').value  = existing.location  || '';
+      document.getElementById('profField').value     = existing.field     || '';
+      document.getElementById('profMemory').value    = existing.memory    || '';
+      document.getElementById('profAdvice').value    = existing.advice    || '';
+      document.getElementById('profSurprise').value  = existing.surprise  || '';
+      document.getElementById('profFuture').value    = existing.future    || '';
+      document.getElementById('profShoutouts').value = existing.shoutouts || '';
+    }
+  }
+};
+window.closeProfileModal    = function() { document.getElementById('profileModal').classList.remove('open'); };
+window.handleProfileOverlay = function(e) { if(e.target===document.getElementById('profileModal')) closeProfileModal(); };
+
+window.saveProfile = async function() {
+  const year = document.getElementById('profYear').value;
+  const err  = document.getElementById('profErr');
+  if (!year) { err.textContent='Please select your graduation year.'; err.style.display='block'; return; }
+  err.style.display='none';
+
+  const snap  = await getDoc(doc(db,'users',currentUser.uid));
+  const udata = snap.exists() ? snap.data() : {};
+
+  const profile = {
+    uid:       currentUser.uid,
+    name:      udata.name || currentUser.email,
+    role:      userRole,
+    gradYear:  year,
+    photoUrl:  document.getElementById('profPhotoUrl').value.trim()  || null,
+    now:       document.getElementById('profNow').value.trim()       || null,
+    location:  document.getElementById('profLocation').value.trim()  || null,
+    field:     document.getElementById('profField').value.trim()     || null,
+    memory:    document.getElementById('profMemory').value.trim()    || null,
+    advice:    document.getElementById('profAdvice').value.trim()    || null,
+    surprise:  document.getElementById('profSurprise').value.trim()  || null,
+    future:    document.getElementById('profFuture').value.trim()    || null,
+    shoutouts: document.getElementById('profShoutouts').value.trim() || null,
+    updatedAt: serverTimestamp(),
+  };
+
+  try {
+    // Use uid as document ID so each user has one profile
+    await setDoc(doc(db,'profiles',currentUser.uid), profile);
+    closeProfileModal();
+    await loadProfiles();
+  } catch(e) { err.textContent='Save failed: '+e.message; err.style.display='block'; }
+};
+
 </script>
 </body>
 </html>
