@@ -675,15 +675,20 @@ footer small{font-size:12px;color:rgba(183,213,230,.45);}
       <button class="modal-x" onclick="closeProfileModal()">✕</button>
     </div>
     <div class="modal-body" style="max-height:75vh;overflow-y:auto;">
+
+      <!-- Shared: photo URL -->
       <div class="fg">
         <label class="fl">Profile Photo URL <span style="color:var(--gray);font-size:11px;font-weight:400;letter-spacing:0;">(paste an image link)</span></label>
         <input type="url" class="fi" id="profPhotoUrl" placeholder="https://…">
         <p class="fh">Link to a photo hosted online (Google Drive, Imgur, etc.) — make sure it's set to public</p>
       </div>
-      <div class="fg">
-        <label class="fl">Graduation Year <span style="color:#c0392b;">*</span></label>
-        <select class="fi" id="profYear" style="background:var(--white);">
-          <option value="">— Select year —</option>
+
+      <!-- STUDENT FIELDS (shown for student/alumni) -->
+      <div id="profStudentFields">
+        <div class="fg">
+          <label class="fl">Graduation Year <span style="color:#c0392b;">*</span></label>
+          <select class="fi" id="profYear" style="background:var(--white);">
+            <option value="">— Select year —</option>
           <option>2015</option>
           <option>2016</option>
           <option>2017</option>
@@ -705,40 +710,74 @@ footer small{font-size:12px;color:rgba(183,213,230,.45);}
           <option>2033</option>
           <option>2034</option>
           <option>2035</option>
-        </select>
+          </select>
+        </div>
+        <div class="fg">
+          <label class="fl">What are you up to now?</label>
+          <textarea class="fi" id="profNow" rows="3" style="resize:vertical;" placeholder="College, work, gap year…"></textarea>
+        </div>
+        <div class="fg">
+          <label class="fl">Where are you living?</label>
+          <input type="text" class="fi" id="profLocation" placeholder="City, State">
+        </div>
+        <div class="fg">
+          <label class="fl">What are you studying or working in?</label>
+          <input type="text" class="fi" id="profField" placeholder="Major, career field, trade…">
+        </div>
+        <div class="fg">
+          <label class="fl">Favorite memory from ACS?</label>
+          <textarea class="fi" id="profMemory" rows="3" style="resize:vertical;" placeholder="A moment, a person, an event…"></textarea>
+        </div>
+        <div class="fg">
+          <label class="fl">What advice would you give your freshman self?</label>
+          <textarea class="fi" id="profAdvice" rows="3" style="resize:vertical;"></textarea>
+        </div>
+        <div class="fg">
+          <label class="fl">What's something people would be surprised to know about you?</label>
+          <textarea class="fi" id="profSurprise" rows="2" style="resize:vertical;"></textarea>
+        </div>
+        <div class="fg">
+          <label class="fl">What does the future look like for you?</label>
+          <textarea class="fi" id="profFuture" rows="3" style="resize:vertical;" placeholder="5 years from now…"></textarea>
+        </div>
+        <div class="fg">
+          <label class="fl">Shoutouts 👋</label>
+          <textarea class="fi" id="profShoutouts" rows="2" style="resize:vertical;" placeholder="Friends, teachers, anyone you want to mention…"></textarea>
+        </div>
       </div>
-      <div class="fg">
-        <label class="fl">What are you up to now?</label>
-        <textarea class="fi" id="profNow" rows="3" style="resize:vertical;" placeholder="College, work, gap year…"></textarea>
+
+      <!-- ADMIN/TEACHER FIELDS (shown for admin) -->
+      <div id="profAdminFields" style="display:none;">
+        <div class="fg">
+          <label class="fl">Title / Role</label>
+          <input type="text" class="fi" id="profTitle" placeholder="e.g. Media Arts Teacher, Principal…">
+        </div>
+        <div class="fg">
+          <label class="fl">Department / Subject Area</label>
+          <input type="text" class="fi" id="profDept" placeholder="e.g. Media Arts Career Academy">
+        </div>
+        <div class="fg">
+          <label class="fl">Years at ACS</label>
+          <input type="text" class="fi" id="profYearsACS" placeholder="e.g. 2018 – present">
+        </div>
+        <div class="fg">
+          <label class="fl">About Me</label>
+          <textarea class="fi" id="profAbout" rows="4" style="resize:vertical;" placeholder="A bit about yourself, your teaching philosophy, interests…"></textarea>
+        </div>
+        <div class="fg">
+          <label class="fl">Favorite memory from ACS?</label>
+          <textarea class="fi" id="profMemoryAdmin" rows="3" style="resize:vertical;" placeholder="A moment, a class, a student…"></textarea>
+        </div>
+        <div class="fg">
+          <label class="fl">What's something students would be surprised to know about you?</label>
+          <textarea class="fi" id="profSurpriseAdmin" rows="2" style="resize:vertical;"></textarea>
+        </div>
+        <div class="fg">
+          <label class="fl">Message to alumni</label>
+          <textarea class="fi" id="profMessage" rows="3" style="resize:vertical;" placeholder="Something you'd want your former students to know…"></textarea>
+        </div>
       </div>
-      <div class="fg">
-        <label class="fl">Where are you living?</label>
-        <input type="text" class="fi" id="profLocation" placeholder="City, State">
-      </div>
-      <div class="fg">
-        <label class="fl">What are you studying or working in?</label>
-        <input type="text" class="fi" id="profField" placeholder="Major, career field, trade…">
-      </div>
-      <div class="fg">
-        <label class="fl">Favorite memory from ACS?</label>
-        <textarea class="fi" id="profMemory" rows="3" style="resize:vertical;" placeholder="A moment, a person, an event…"></textarea>
-      </div>
-      <div class="fg">
-        <label class="fl">What advice would you give your freshman self?</label>
-        <textarea class="fi" id="profAdvice" rows="3" style="resize:vertical;"></textarea>
-      </div>
-      <div class="fg">
-        <label class="fl">What's something people would be surprised to know about you?</label>
-        <textarea class="fi" id="profSurprise" rows="2" style="resize:vertical;"></textarea>
-      </div>
-      <div class="fg">
-        <label class="fl">What does the future look like for you?</label>
-        <textarea class="fi" id="profFuture" rows="3" style="resize:vertical;" placeholder="5 years from now…"></textarea>
-      </div>
-      <div class="fg">
-        <label class="fl">Shoutouts 👋</label>
-        <textarea class="fi" id="profShoutouts" rows="2" style="resize:vertical;" placeholder="Friends, teachers, anyone you want to mention…"></textarea>
-      </div>
+
       <p style="font-size:12px;color:var(--muted);margin-bottom:16px;">Your profile will be visible to all logged-in users. Leave any field blank to skip it.</p>
       <div class="auth-err" id="profErr"></div>
       <button class="btn-sub" onclick="saveProfile()">Save Profile</button>
@@ -1826,24 +1865,50 @@ function renderProfileDirectory() {
   const el = document.getElementById('profileDirectory');
   if (!el) return;
   if (!allProfiles.length) {
-    el.innerHTML = `<div class="empty-state"><h3>No profiles yet</h3><p>Signed-in alumni can create their profile using the button above.</p></div>`;
+    el.innerHTML = `<div class="empty-state"><h3>No profiles yet</h3><p>Signed-in users can create their profile using the button above.</p></div>`;
     return;
   }
-  // Group by graduation year, sort years descending
+
+  // Split faculty vs students
+  const faculty  = allProfiles.filter(p => p.role === 'admin').sort((a,b) => (a.name||'').localeCompare(b.name||''));
+  const students = allProfiles.filter(p => p.role !== 'admin');
+
+  // Group students by graduation year, sort years descending
   const byYear = {};
-  allProfiles.forEach(p => {
+  students.forEach(p => {
     const yr = p.gradYear || 'Unknown';
     if (!byYear[yr]) byYear[yr] = [];
     byYear[yr].push(p);
   });
-  const sortedYears = Object.keys(byYear).sort((a,b) => b-a);
-  el.innerHTML = sortedYears.map(yr => {
+  const sortedYears = Object.keys(byYear).sort((a,b) => {
+    if (a === 'Unknown') return 1;
+    if (b === 'Unknown') return -1;
+    return b - a;
+  });
+
+  let html = '';
+
+  // Faculty section first
+  if (faculty.length) {
+    html += `<div class="profile-year-section">
+      <h3 class="profile-year-title" style="color:var(--blue);border-color:var(--gold);">
+        <span style="background:var(--gold);color:var(--blue);font-size:11px;padding:2px 8px;border-radius:3px;margin-right:10px;vertical-align:middle;">FACULTY &amp; STAFF</span>
+      </h3>
+      <div class="profile-grid">${faculty.map(p => profileCardHTML(p)).join('')}</div>
+    </div>`;
+  }
+
+  // Student sections by year
+  html += sortedYears.map(yr => {
     const profiles = byYear[yr].sort((a,b) => (a.name||'').localeCompare(b.name||''));
+    const label    = yr === 'Unknown' ? 'Year Unknown' : 'Class of ' + yr;
     return `<div class="profile-year-section">
-      <h3 class="profile-year-title">Class of ${yr}</h3>
+      <h3 class="profile-year-title">${label}</h3>
       <div class="profile-grid">${profiles.map(p => profileCardHTML(p)).join('')}</div>
     </div>`;
   }).join('');
+
+  el.innerHTML = html;
 }
 
 function profileCardHTML(p) {
@@ -1872,16 +1937,34 @@ window.openProfileDetail = async function(id) {
        <div class="profile-initials" style="display:none;">${initials}</div>`
     : `<div class="profile-initials">${initials}</div>`;
 
-  // Q&A section — only show answered questions
-  const qaItems = PROFILE_QUESTIONS
+  // Q&A — role-appropriate questions
+  const isTeacher = p.role === 'admin';
+  const studentQs = [
+    { id:'now',       label:'What are you up to now?' },
+    { id:'location',  label:'Where are you living?' },
+    { id:'field',     label:'What are you studying or working in?' },
+    { id:'memory',    label:'Favorite memory from ACS?' },
+    { id:'advice',    label:'What advice would you give your freshman self?' },
+    { id:'surprise',  label:"What's something people would be surprised to know?" },
+    { id:'future',    label:'What does the future look like for you?' },
+    { id:'shoutouts', label:'Shoutouts 👋' },
+  ];
+  const adminQs = [
+    { id:'title',    label:'Title / Role' },
+    { id:'dept',     label:'Department / Subject Area' },
+    { id:'yearsACS', label:'Years at ACS' },
+    { id:'about',    label:'About Me' },
+    { id:'memory',   label:'Favorite memory from ACS?' },
+    { id:'surprise', label:"What's something students would be surprised to know?" },
+    { id:'message',  label:'Message to alumni' },
+  ];
+  const questions = isTeacher ? adminQs : studentQs;
+  const qaItems   = questions
     .filter(q => p[q.id])
     .map(q => `<div class="profile-qa-item">
       <div class="profile-qa-q">${q.label}</div>
       <div class="profile-qa-a">${p[q.id]}</div>
     </div>`).join('');
-
-  // Teacher pinboard
-  const isTeacher = p.role === 'admin';
 
   // Own profile edit button
   const isOwn = currentUser && currentUser.uid === p.uid;
@@ -1890,20 +1973,42 @@ window.openProfileDetail = async function(id) {
   // Pin post button for teacher on their own profile
   const pinPostBtn = (isTeacher && isOwn) ? `<button class="pin-post-btn" onclick="openPinModal()">+ Add Pinboard Post</button>` : '';
 
+  // Build sidebar subtitle based on role
+  const sidebarSub = isTeacher
+    ? [p.title, p.dept].filter(Boolean).join('<br>')
+    : [p.field, p.location].filter(Boolean).join('<br>');
+  const sidebarLabel = isTeacher
+    ? `<div class="profile-detail-year" style="color:var(--aqua);">Faculty &amp; Staff</div>`
+    : (p.gradYear ? `<div class="profile-detail-year">Class of ${p.gradYear}</div>` : '');
+
+  // Inline pinboard post form for teacher on own profile
+  const pinForm = (isTeacher && isOwn) ? `
+    <div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,.15);">
+      <p style="font-family:'Dosis',sans-serif;font-weight:700;font-size:11px;letter-spacing:.10em;text-transform:uppercase;color:var(--aqua);margin-bottom:8px;">Add a pin</p>
+      <input type="text" id="pinTitleInput" class="up-input" style="margin-bottom:6px;font-size:13px;" placeholder="Title">
+      <textarea id="pinBodyInput" rows="2" class="up-input" style="margin-bottom:6px;font-size:13px;resize:vertical;" placeholder="Message…"></textarea>
+      <input type="url" id="pinLinkInput" class="up-input" style="margin-bottom:8px;font-size:13px;" placeholder="Link (optional)">
+      <button class="pin-post-btn" onclick="submitPin()">Post Pin</button>
+    </div>` : '';
+
   document.getElementById('profileDetailContent').innerHTML = `
     <div class="profile-detail">
       <div class="profile-detail-sidebar">
         <div class="profile-detail-photo">${photo}</div>
         <div class="profile-detail-info">
           <div class="profile-detail-name">${p.name||'—'}</div>
-          <div class="profile-detail-year">Class of ${p.gradYear||'—'}</div>
-          <div class="profile-detail-sub">${[p.field,p.location].filter(Boolean).join('<br>')}</div>
+          ${sidebarLabel}
+          <div class="profile-detail-sub">${sidebarSub}</div>
           ${editBtn}
         </div>
       </div>
       <div>
-        ${qaItems ? `<div class="profile-qa-card">${qaItems}</div>` : `<div class="empty-state"><h3>Profile in progress</h3><p>This alumni hasn't filled out their profile yet.</p></div>`}
-        ${isTeacher ? `<div class="pinboard" id="teacherPinboard"><div class="pinboard-title">📌 From ${(p.name||'').split(' ')[0]||'this teacher'}'s desk</div><div id="pinItems">Loading…</div>${pinPostBtn}</div>` : ''}
+        ${qaItems ? `<div class="profile-qa-card">${qaItems}</div>` : `<div class="empty-state"><h3>Profile in progress</h3><p>This user hasn't filled out their profile yet.</p></div>`}
+        ${isTeacher ? `<div class="pinboard" id="teacherPinboard">
+          <div class="pinboard-title">📌 From ${(p.name||'').split(' ')[0]||'this teacher'}'s desk</div>
+          <div id="pinItems">Loading…</div>
+          ${pinForm}
+        </div>` : ''}
       </div>
     </div>`;
 
@@ -1929,14 +2034,16 @@ async function loadPins(uid) {
   } catch(e) { el.innerHTML='<p style="font-size:13px;color:var(--muted);">Could not load pins.</p>'; }
 }
 
-// Pin modal (teacher pinboard posts)
-window.openPinModal = function() {
-  const title = prompt('Pin title:');
-  if (!title) return;
-  const body  = prompt('Pin message:');
-  if (!body)  return;
-  const link  = prompt('Link (optional — press Enter to skip):');
-  addPin(title, body, link||null);
+// Submit pin from inline form on profile detail page
+window.submitPin = async function() {
+  const title = document.getElementById('pinTitleInput').value.trim();
+  const body  = document.getElementById('pinBodyInput').value.trim();
+  const link  = document.getElementById('pinLinkInput').value.trim();
+  if (!title || !body) { alert('Please add a title and message.'); return; }
+  await addPin(title, body, link||null);
+  document.getElementById('pinTitleInput').value = '';
+  document.getElementById('pinBodyInput').value  = '';
+  document.getElementById('pinLinkInput').value  = '';
 };
 
 async function addPin(title, body, link) {
@@ -1957,20 +2064,35 @@ async function addPin(title, body, link) {
 window.openProfileModal = async function(mode) {
   document.getElementById('profileModal').classList.add('open');
   document.getElementById('profErr').style.display = 'none';
+
+  // Show correct fields based on role
+  const isAdmin = userRole === 'admin';
+  document.getElementById('profStudentFields').style.display = isAdmin ? 'none' : 'block';
+  document.getElementById('profAdminFields').style.display   = isAdmin ? 'block' : 'none';
+
   if (mode === 'edit' && currentUser) {
-    // Pre-fill with existing profile
     const existing = allProfiles.find(p => p.uid === currentUser.uid);
     if (existing) {
-      document.getElementById('profPhotoUrl').value  = existing.photoUrl  || '';
-      document.getElementById('profYear').value      = existing.gradYear  || '';
-      document.getElementById('profNow').value       = existing.now       || '';
-      document.getElementById('profLocation').value  = existing.location  || '';
-      document.getElementById('profField').value     = existing.field     || '';
-      document.getElementById('profMemory').value    = existing.memory    || '';
-      document.getElementById('profAdvice').value    = existing.advice    || '';
-      document.getElementById('profSurprise').value  = existing.surprise  || '';
-      document.getElementById('profFuture').value    = existing.future    || '';
-      document.getElementById('profShoutouts').value = existing.shoutouts || '';
+      document.getElementById('profPhotoUrl').value = existing.photoUrl || '';
+      if (isAdmin) {
+        document.getElementById('profTitle').value        = existing.title        || '';
+        document.getElementById('profDept').value         = existing.dept         || '';
+        document.getElementById('profYearsACS').value     = existing.yearsACS     || '';
+        document.getElementById('profAbout').value        = existing.about        || '';
+        document.getElementById('profMemoryAdmin').value  = existing.memory       || '';
+        document.getElementById('profSurpriseAdmin').value= existing.surprise     || '';
+        document.getElementById('profMessage').value      = existing.message      || '';
+      } else {
+        document.getElementById('profYear').value      = existing.gradYear  || '';
+        document.getElementById('profNow').value       = existing.now       || '';
+        document.getElementById('profLocation').value  = existing.location  || '';
+        document.getElementById('profField').value     = existing.field     || '';
+        document.getElementById('profMemory').value    = existing.memory    || '';
+        document.getElementById('profAdvice').value    = existing.advice    || '';
+        document.getElementById('profSurprise').value  = existing.surprise  || '';
+        document.getElementById('profFuture').value    = existing.future    || '';
+        document.getElementById('profShoutouts').value = existing.shoutouts || '';
+      }
     }
   }
 };
@@ -1978,33 +2100,55 @@ window.closeProfileModal    = function() { document.getElementById('profileModal
 window.handleProfileOverlay = function(e) { if(e.target===document.getElementById('profileModal')) closeProfileModal(); };
 
 window.saveProfile = async function() {
-  const year = document.getElementById('profYear').value;
-  const err  = document.getElementById('profErr');
-  if (!year) { err.textContent='Please select your graduation year.'; err.style.display='block'; return; }
-  err.style.display='none';
+  const err     = document.getElementById('profErr');
+  const isAdmin = userRole === 'admin';
+  err.style.display = 'none';
+
+  // Validate required fields by role
+  if (!isAdmin) {
+    const year = document.getElementById('profYear').value;
+    if (!year) { err.textContent='Please select your graduation year.'; err.style.display='block'; return; }
+  }
 
   const snap  = await getDoc(doc(db,'users',currentUser.uid));
   const udata = snap.exists() ? snap.data() : {};
 
-  const profile = {
+  let profile = {
     uid:       currentUser.uid,
     name:      udata.name || currentUser.email,
     role:      userRole,
-    gradYear:  year,
-    photoUrl:  document.getElementById('profPhotoUrl').value.trim()  || null,
-    now:       document.getElementById('profNow').value.trim()       || null,
-    location:  document.getElementById('profLocation').value.trim()  || null,
-    field:     document.getElementById('profField').value.trim()     || null,
-    memory:    document.getElementById('profMemory').value.trim()    || null,
-    advice:    document.getElementById('profAdvice').value.trim()    || null,
-    surprise:  document.getElementById('profSurprise').value.trim()  || null,
-    future:    document.getElementById('profFuture').value.trim()    || null,
-    shoutouts: document.getElementById('profShoutouts').value.trim() || null,
+    photoUrl:  document.getElementById('profPhotoUrl').value.trim() || null,
     updatedAt: serverTimestamp(),
   };
 
+  if (isAdmin) {
+    // Teacher/admin profile fields
+    Object.assign(profile, {
+      gradYear:  null,
+      title:     document.getElementById('profTitle').value.trim()         || null,
+      dept:      document.getElementById('profDept').value.trim()          || null,
+      yearsACS:  document.getElementById('profYearsACS').value.trim()      || null,
+      about:     document.getElementById('profAbout').value.trim()         || null,
+      memory:    document.getElementById('profMemoryAdmin').value.trim()   || null,
+      surprise:  document.getElementById('profSurpriseAdmin').value.trim() || null,
+      message:   document.getElementById('profMessage').value.trim()       || null,
+    });
+  } else {
+    // Student/alumni profile fields
+    Object.assign(profile, {
+      gradYear:  document.getElementById('profYear').value,
+      now:       document.getElementById('profNow').value.trim()       || null,
+      location:  document.getElementById('profLocation').value.trim()  || null,
+      field:     document.getElementById('profField').value.trim()     || null,
+      memory:    document.getElementById('profMemory').value.trim()    || null,
+      advice:    document.getElementById('profAdvice').value.trim()    || null,
+      surprise:  document.getElementById('profSurprise').value.trim()  || null,
+      future:    document.getElementById('profFuture').value.trim()    || null,
+      shoutouts: document.getElementById('profShoutouts').value.trim() || null,
+    });
+  }
+
   try {
-    // Use uid as document ID so each user has one profile
     await setDoc(doc(db,'profiles',currentUser.uid), profile);
     closeProfileModal();
     await loadProfiles();
