@@ -3,7 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Triton Alumni — Class Portal</title>
+<meta name="description" content="A private community for Atlantis Charter School alumni and staff.">
+<meta name="theme-color" content="#002d5d">
+<meta property="og:title" content="Triton Alumni Portal">
+<meta property="og:description" content="Photos, memories, and connections for ACS alumni.">
+<title>Triton Alumni Portal</title>
 <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@300;400;500;600;700;800&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -383,8 +387,8 @@ footer small{font-size:12px;color:rgba(183,213,230,.45);}
   <div class="nav-brand" onclick="goTo('home')">
     <div class="nav-lm">A</div>
     <div class="nav-title">
-      <span>Triton Alumni</span>
-      <span>Class Portal</span>
+      <span>Triton Alumni Portal</span>
+      <span>Alumni Portal</span>
     </div>
   </div>
   <div class="nav-links">
@@ -410,9 +414,9 @@ footer small{font-size:12px;color:rgba(183,213,230,.45);}
 <div class="view active" id="view-home">
   <section class="hero">
     <div class="hero-inner">
-      <p class="eyebrow">Class of 2025 · Atlantis Charter School</p>
+      <p class="eyebrow">Atlantis Charter School · Fall River, MA</p>
       <h1>Once a Triton,<br><em>Always a Triton.</em></h1>
-      <p class="hero-sub">Your home for photos, videos, and memories. A community built by the people who were there.</p>
+      <p class="hero-sub">Your home for photos, videos, and memories — a private community built by the people who were there.</p>
       <div class="hero-actions" id="heroActions">
         <button class="btn-p" onclick="openModal('signup')">Create Your Account</button>
         <button class="btn-g" onclick="openModal('login')">I Already Have Access</button>
@@ -437,7 +441,7 @@ footer small{font-size:12px;color:rgba(183,213,230,.45);}
     </div>
     <div id="albumGridContainer" style="width:100%;"><div class="spinner"><div class="spinner-ring"></div></div></div>
   </main>
-  <footer><p class="footer-wm">Triton Alumni</p><div class="footer-line"></div><small>A community space for Atlantis Charter School alumni &amp; staff — access by invitation only.</small></footer>
+  <footer><p class="footer-wm">Triton Alumni Portal</p><div class="footer-line"></div><small>A private community for Atlantis Charter School alumni &amp; staff — access by invitation only.</small></footer>
 </div>
 
 <!-- VIEW: ALBUM -->
@@ -647,7 +651,7 @@ footer small{font-size:12px;color:rgba(183,213,230,.45);}
 <div class="modal-overlay" id="annModal" onclick="handleAnnOverlay(event)">
   <div class="modal" style="max-width:560px;">
     <div class="modal-hdr">
-      <div class="modal-logo"><div class="modal-lm">A</div><span>Triton Alumni</span></div>
+      <div class="modal-logo"><div class="modal-lm">A</div><span>Triton Alumni Portal</span></div>
       <h2 class="modal-ttl" id="annModalTitle">New Announcement</h2>
       <button class="modal-x" onclick="closeAnnModal()">✕</button>
     </div>
@@ -691,7 +695,7 @@ footer small{font-size:12px;color:rgba(183,213,230,.45);}
 <div class="modal-overlay" id="profileModal" onclick="handleProfileOverlay(event)">
   <div class="modal" style="max-width:560px;">
     <div class="modal-hdr">
-      <div class="modal-logo"><div class="modal-lm">A</div><span>Triton Alumni</span></div>
+      <div class="modal-logo"><div class="modal-lm">A</div><span>Triton Alumni Portal</span></div>
       <h2 class="modal-ttl">My Profile</h2>
       <button class="modal-x" onclick="closeProfileModal()">✕</button>
     </div>
@@ -890,7 +894,7 @@ footer small{font-size:12px;color:rgba(183,213,230,.45);}
 <div class="modal-overlay" id="authModal" onclick="handleOverlayClick(event)">
   <div class="modal">
     <div class="modal-hdr">
-      <div class="modal-logo"><div class="modal-lm">A</div><span>Triton Alumni</span></div>
+      <div class="modal-logo"><div class="modal-lm">A</div><span>Triton Alumni Portal</span></div>
       <h2 class="modal-ttl" id="modalTitle">Welcome Back</h2>
       <button class="modal-x" onclick="closeModal()">✕</button>
     </div>
@@ -914,7 +918,7 @@ footer small{font-size:12px;color:rgba(183,213,230,.45);}
           <input type="text" class="fi" id="signupCode" placeholder="Enter your access code"
             style="letter-spacing:.10em;text-transform:uppercase;"
             oninput="previewClassYear(this.value)">
-          <p class="fh">Enter the code provided by your school. Class-specific codes (e.g. SENIOR25) will automatically set your graduation year.</p>
+          <p class="fh">Enter the code provided by your school. Class-specific codes will automatically set your graduation year.</p>
         </div>
         <div class="fg" id="gradYearPreviewRow" style="display:none;">
           <label class="fl">Graduation Year <span style="color:var(--gold);font-size:11px;font-weight:600;">✓ Detected from code</span></label>
@@ -1263,7 +1267,7 @@ function renderAlbumIndex() {
   }
 
   if (!allAlbums.length) {
-    container.innerHTML = `<div class="no-results"><h3>No albums yet</h3><p>Once media is uploaded and tagged, albums will appear here automatically.</p></div>`;
+    container.innerHTML = `<div class="no-results"><h3>No albums yet</h3><p>Once photos are uploaded and tagged, albums will appear here automatically. Check back soon.</p></div>`;
     return;
   }
 
