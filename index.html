@@ -1097,12 +1097,14 @@ window.addDriveLink = function() {
       return;
     }
     const isVid = url.includes('video') || url.includes('mp4') || url.includes('mov');
+    // Use Drive's thumbnail endpoint for images — works for publicly shared files
+    const thumbUrl = isVid ? null : `https://drive.google.com/thumbnail?id=${id}&sz=w400`;
     pendingFiles.push({
       source:   'drive',
       driveId:  id,
       name:     'Drive file (' + id.slice(0,8) + '…)',
       mimeType: isVid ? 'video/mp4' : 'image/jpeg',
-      thumbUrl: null,
+      thumbUrl,
     });
     added++;
   });
@@ -1282,8 +1284,13 @@ function isVideo(p) { return p.resourceType==='video' || (p.fileType||'').starts
 function isDrive(p) { return p.source === 'drive'; }
 
 function mediaThumb(p, i) {
-  if (p.thumbnailUrl) return `<img src="${p.thumbnailUrl}" alt="${p.title||''}" loading="lazy">`;
+  if (p.thumbnailUrl) return `<img src="${p.thumbnailUrl}" alt="${p.title||''}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="ph" style="display:none;">${phSVG(i)}</div>`;
   if (p.cloudinaryUrl && !isVideo(p)) return `<img src="${p.cloudinaryUrl}" alt="${p.title||''}" loading="lazy">`;
+  // Fallback: generate Drive thumbnail on the fly for old Drive photos missing thumbnailUrl
+  if (isDrive(p) && p.driveId && !isVideo(p)) {
+    const url = `https://drive.google.com/thumbnail?id=${p.driveId}&sz=w400`;
+    return `<img src="${url}" alt="${p.title||''}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="ph" style="display:none;">${phSVG(i)}</div>`;
+  }
   return `<div class="ph">${phSVG(i)}</div>`;
 }
 
@@ -1826,13 +1833,16 @@ window.startUpload = async function() {
       } else if (item.source === 'drive') {
         // Drive files: store the Drive ID directly, embed via Drive preview
         const isVid = (item.mimeType||'').startsWith('video/');
+        // Auto-generate thumbnail URL for Drive images if not already set
+        const driveThumb = item.thumbUrl ||
+          (isVid ? null : `https://drive.google.com/thumbnail?id=${item.driveId}&sz=w400`);
         await addDoc(collection(db,'photos'), {
           title:        title || item.name,
           date,
           tags,
           source:       'drive',
           driveId:      item.driveId,
-          thumbnailUrl: item.thumbUrl || null,
+          thumbnailUrl: driveThumb,
           mimeType:     item.mimeType || null,
           resourceType: isVid ? 'video' : 'image',
           uploadedBy:   currentUser.uid,
