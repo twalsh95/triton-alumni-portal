@@ -538,14 +538,14 @@ footer small{font-size:12px;color:rgba(183,213,230,.45);}
               <li>Make sure access is set to <strong>"Anyone with the link"</strong></li>
               <li>Paste the link below</li>
             </ol>
-            <label class="up-label" style="margin-bottom:6px;">Paste Drive link</label>
-            <div style="display:flex;gap:8px;align-items:flex-start;">
-              <input type="text" id="driveLinkInput" class="up-input"
-                style="font-size:13px;"
-                placeholder="https://drive.google.com/file/d/...">
-              <button onclick="addDriveLink()" class="btn-browse" style="white-space:nowrap;padding:11px 18px;margin-top:0;">+ Add</button>
+            <label class="up-label" style="margin-bottom:6px;">Paste Drive link(s)</label>
+            <textarea id="driveLinkInput" rows="4" class="up-input"
+              style="font-size:13px;resize:vertical;"
+              placeholder="Paste one or more Google Drive sharing links&#10;Separate multiple links with commas or new lines"></textarea>
+            <div style="display:flex;justify-content:flex-end;margin-top:8px;">
+              <button onclick="addDriveLink()" class="btn-browse" style="white-space:nowrap;padding:10px 20px;">+ Add to Queue</button>
             </div>
-            <p style="font-size:12px;color:var(--muted);margin-top:8px;">One file at a time. For bulk uploads use Device Upload instead.</p>
+            <p style="font-size:12px;color:var(--muted);margin-top:6px;">Paste multiple links separated by commas or new lines. Each must be an individual file link — folder links are not supported.</p>
           </div>
         </div>
 
@@ -999,24 +999,41 @@ window.switchSource = function(src) {
 
 window.addDriveLink = function() {
   const input = document.getElementById('driveLinkInput');
-  const url   = input.value.trim();
-  if (!url) return;
-  const id = parseDriveId(url);
-  if (!id) {
-    alert('Could not find a file ID in that link. Make sure you copied the full sharing URL from Google Drive.');
-    return;
-  }
-  // Determine if it's likely a video by checking URL or default to image
-  const isVid = url.includes('video') || url.includes('mp4') || url.includes('mov');
-  pendingFiles.push({
-    source:   'drive',
-    driveId:  id,
-    name:     'Drive file (' + id.slice(0,8) + '…)',
-    mimeType: isVid ? 'video/mp4' : 'image/jpeg',
-    thumbUrl: null,
+  const raw   = input.value.trim();
+  if (!raw) return;
+
+  // Split by commas or newlines, trim each entry
+  const rawNormalized = raw.replace(/\n/g, ',');
+  const urls = rawNormalized.split(',').map(u => u.trim()).filter(Boolean);
+  const failed = [];
+  let added = 0;
+
+  urls.forEach(url => {
+    const id = parseDriveId(url);
+    if (!id) {
+      failed.push(url.slice(0, 40) + (url.length > 40 ? '…' : ''));
+      return;
+    }
+    const isVid = url.includes('video') || url.includes('mp4') || url.includes('mov');
+    pendingFiles.push({
+      source:   'drive',
+      driveId:  id,
+      name:     'Drive file (' + id.slice(0,8) + '…)',
+      mimeType: isVid ? 'video/mp4' : 'image/jpeg',
+      thumbUrl: null,
+    });
+    added++;
   });
+
   input.value = '';
   renderFileList();
+
+  if (failed.length) {
+    const result = document.getElementById('uploadResult');
+    result.className     = 'upload-result error';
+    result.textContent   = added + ' link' + (added!==1?'s':'') + ' added. Could not parse ' + failed.length + ' link' + (failed.length!==1?'s':'') + ' — make sure each is a full Google Drive file sharing URL.';
+    result.style.display = 'block';
+  }
 };
 
 window.addVideoUrl = function() {
