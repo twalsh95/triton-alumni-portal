@@ -293,6 +293,37 @@ main{max-width:1200px;margin:0 auto;padding:48px 32px;}
 .gallery-year-heading .yr-badge{background:var(--gold);color:var(--blue);font-size:11px;padding:2px 9px;border-radius:3px;}
 .album-year-section{margin-bottom:36px;}
 .album-year-heading{font-family:'Dosis',sans-serif;font-weight:700;font-size:13px;letter-spacing:.10em;text-transform:uppercase;color:var(--muted);padding:6px 0 10px;border-bottom:1px solid var(--gl);margin-bottom:16px;}
+
+/* ── MANAGE MODE ── */
+.manage-toolbar{display:none;position:sticky;top:70px;z-index:150;background:var(--blue);border-radius:var(--rl);padding:14px 20px;margin-bottom:24px;align-items:center;gap:12px;flex-wrap:wrap;box-shadow:0 4px 20px rgba(0,45,93,.3);}
+.manage-toolbar.visible{display:flex;}
+.manage-toolbar-label{font-family:'Dosis',sans-serif;font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--aqua);flex:1;}
+.manage-toolbar-label strong{color:var(--gold);}
+.btn-manage{font-family:'Dosis',sans-serif;font-weight:700;font-size:12px;letter-spacing:.06em;text-transform:uppercase;background:rgba(255,255,255,.12);color:var(--white);border:1px solid rgba(255,255,255,.25);padding:7px 14px;border-radius:var(--r);cursor:pointer;transition:all .18s;}
+.btn-manage:hover{background:rgba(255,255,255,.22);}
+.btn-manage.remove-tag{background:rgba(246,168,0,.2);color:var(--gold);border-color:rgba(246,168,0,.4);}
+.btn-manage.remove-tag:hover{background:rgba(246,168,0,.35);}
+.btn-manage.delete-sel{background:rgba(192,57,43,.25);color:#ff9999;border-color:rgba(192,57,43,.4);}
+.btn-manage.delete-sel:hover{background:rgba(192,57,43,.45);}
+.btn-manage.cancel{background:transparent;color:var(--aqua);}
+.photo-card.selectable{cursor:pointer;}
+.photo-card .select-check{position:absolute;top:8px;left:8px;z-index:2;width:22px;height:22px;border-radius:4px;background:rgba(0,0,0,.5);border:2px solid rgba(255,255,255,.6);display:none;align-items:center;justify-content:center;font-size:13px;color:var(--white);cursor:pointer;transition:all .15s;}
+.manage-active .photo-card .select-check{display:flex;}
+.photo-card.selected .select-check{background:var(--gold);border-color:var(--gold);color:var(--blue);}
+.photo-card.selected{outline:3px solid var(--gold);outline-offset:2px;}
+.manage-active .photo-card:hover{transform:none;}
+
+/* reorder mode */
+.reorder-active .photo-card{cursor:grab;transition:opacity .15s,box-shadow .15s;}
+.reorder-active .photo-card:active{cursor:grabbing;}
+.reorder-active .photo-card.drag-over-card{box-shadow:0 0 0 3px var(--gold);opacity:.8;}
+.reorder-active .photo-card.dragging{opacity:.4;}
+.reorder-save-bar{display:none;position:sticky;bottom:20px;z-index:150;text-align:center;margin-top:20px;}
+.reorder-save-bar.visible{display:block;}
+.btn-save-order{font-family:'Dosis',sans-serif;font-weight:700;font-size:14px;letter-spacing:.06em;text-transform:uppercase;background:var(--gold);color:var(--blue);border:none;padding:12px 32px;border-radius:var(--r);box-shadow:0 4px 20px rgba(246,168,0,.4);cursor:pointer;margin-right:10px;transition:all .2s;}
+.btn-save-order:hover{background:var(--gold-h);transform:translateY(-2px);}
+.btn-cancel-order{font-family:'Dosis',sans-serif;font-weight:600;font-size:14px;letter-spacing:.06em;text-transform:uppercase;background:rgba(0,45,93,.08);color:var(--blue);border:1.5px solid var(--gl);padding:11px 24px;border-radius:var(--r);cursor:pointer;transition:all .2s;}
+
 /* FOOTER */
 footer{background:var(--blue);color:var(--aqua);padding:28px 32px;text-align:center;margin-top:60px;}
 .footer-wm{font-family:'Dosis',sans-serif;font-weight:800;font-size:16px;letter-spacing:.12em;text-transform:uppercase;color:var(--white);margin-bottom:4px;}
@@ -458,9 +489,60 @@ footer small{font-size:12px;color:rgba(183,213,230,.45);}
         <h2 class="page-hdr-title" id="albumTitle">—</h2>
         <p class="page-hdr-sub" id="albumSub">—</p>
       </div>
-      <div class="page-hdr-count" id="albumCount">—<span>items</span></div>
+      <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
+        <div class="page-hdr-count" id="albumCount">—<span>items</span></div>
+        <div id="albumAdminBtns" style="display:none;flex-direction:column;gap:6px;">
+          <button class="btn-manage" onclick="toggleManageMode()" id="manageModeBtn">☑ Manage</button>
+          <button class="btn-manage" onclick="toggleReorderMode()" id="reorderModeBtn">⇅ Reorder</button>
+          <button class="btn-manage" onclick="openAlbumUpload()">+ Add Photos</button>
+          <button class="btn-manage delete-sel" onclick="deleteAlbumPrompt()">🗑 Delete Album</button>
+        </div>
+      </div>
+    </div>
+    <!-- Manage mode toolbar -->
+    <div class="manage-toolbar" id="manageToolbar">
+      <span class="manage-toolbar-label"><strong id="selectedCount">0</strong> selected</span>
+      <button class="btn-manage" onclick="selectAllPhotos()">Select All</button>
+      <button class="btn-manage" onclick="deselectAllPhotos()">Deselect All</button>
+      <button class="btn-manage" onclick="openAddTagPanel()">➕ Add Tag</button>
+      <button class="btn-manage remove-tag" onclick="removeTagFromSelected()">✕ Remove Tag</button>
+      <button class="btn-manage" onclick="openMoveToAlbum()">📁 Move to Album</button>
+      <button class="btn-manage delete-sel" onclick="deleteSelectedPhotos()">🗑 Delete</button>
+      <button class="btn-manage cancel" onclick="toggleManageMode()">Cancel</button>
+    </div>
+
+    <!-- Add tag inline panel -->
+    <div id="addTagPanel" style="display:none;background:var(--blue);border-radius:var(--r);padding:16px 20px;margin-bottom:16px;">
+      <p style="font-family:'Dosis',sans-serif;font-weight:700;font-size:11px;letter-spacing:.10em;text-transform:uppercase;color:var(--aqua);margin-bottom:12px;">Add tag to selected photos</p>
+      <div id="addTagChips" style="display:flex;flex-direction:column;gap:10px;"></div>
+      <div style="display:flex;gap:8px;margin-top:12px;align-items:center;">
+        <input type="text" id="addTagCustomInput" placeholder="Custom tag…"
+          style="flex:1;padding:7px 10px;border:1.5px solid rgba(255,255,255,.2);border-radius:var(--r);background:rgba(255,255,255,.08);color:var(--white);font-size:12px;outline:none;">
+        <button onclick="addCustomToSelected()" style="font-family:'Dosis',sans-serif;font-weight:700;font-size:11px;letter-spacing:.06em;text-transform:uppercase;background:rgba(255,255,255,.15);color:var(--white);border:none;padding:7px 12px;border-radius:var(--r);cursor:pointer;">+ Add</button>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:12px;">
+        <button onclick="applyAddTags()" style="font-family:'Dosis',sans-serif;font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;background:var(--gold);color:var(--blue);border:none;padding:9px 20px;border-radius:var(--r);cursor:pointer;">Apply to Selected</button>
+        <button onclick="closeAddTagPanel()" style="font-family:'Dosis',sans-serif;font-weight:600;font-size:13px;letter-spacing:.06em;text-transform:uppercase;background:rgba(255,255,255,.1);color:var(--white);border:1px solid rgba(255,255,255,.2);padding:9px 16px;border-radius:var(--r);cursor:pointer;">Cancel</button>
+      </div>
+    </div>
+
+    <!-- Move to album panel -->
+    <div id="moveAlbumPanel" style="display:none;background:var(--blue);border-radius:var(--r);padding:16px 20px;margin-bottom:16px;">
+      <p style="font-family:'Dosis',sans-serif;font-weight:700;font-size:11px;letter-spacing:.10em;text-transform:uppercase;color:var(--aqua);margin-bottom:12px;">Move selected photos to album</p>
+      <p style="font-size:12px;color:rgba(183,213,230,.7);margin-bottom:12px;">This removes the current album tag and adds the selected one.</p>
+      <select id="moveAlbumSelect" style="width:100%;padding:10px 12px;border:1.5px solid rgba(255,255,255,.2);border-radius:var(--r);background:rgba(255,255,255,.08);color:var(--white);font-size:14px;outline:none;margin-bottom:12px;">
+        <option value="">— Select destination album —</option>
+      </select>
+      <div style="display:flex;gap:8px;">
+        <button onclick="applyMoveToAlbum()" style="font-family:'Dosis',sans-serif;font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;background:var(--gold);color:var(--blue);border:none;padding:9px 20px;border-radius:var(--r);cursor:pointer;">Move Photos</button>
+        <button onclick="closeMoveAlbumPanel()" style="font-family:'Dosis',sans-serif;font-weight:600;font-size:13px;letter-spacing:.06em;text-transform:uppercase;background:rgba(255,255,255,.1);color:var(--white);border:1px solid rgba(255,255,255,.2);padding:9px 16px;border-radius:var(--r);cursor:pointer;">Cancel</button>
+      </div>
     </div>
     <div id="albumPhotoGrid"></div>
+    <div class="reorder-save-bar" id="reorderSaveBar">
+      <button class="btn-save-order" onclick="saveReorder()">💾 Save Order</button>
+      <button class="btn-cancel-order" onclick="cancelReorder()">Cancel</button>
+    </div>
   </main>
 </div>
 
@@ -1340,7 +1422,18 @@ window.setYearFilter = function(yr) {
 
 // ── ALBUM VIEW ─────────────────────────────────────────────────
 window.goToAlbum = function(tag) {
-  const allTagPhotos = allPhotos.filter(p => (p.tags||[]).includes(tag));
+  setCurrentAlbumTag(tag);  // sets manage mode state
+  // Sort by sortOrder if set, otherwise by uploadedAt (newest first)
+  const allTagPhotos = allPhotos
+    .filter(p => (p.tags||[]).includes(tag))
+    .sort((a,b) => {
+      const aHas = a.sortOrder != null;
+      const bHas = b.sortOrder != null;
+      if (aHas && bHas) return a.sortOrder - b.sortOrder;
+      if (aHas) return -1;
+      if (bHas) return 1;
+      return 0; // keep Firestore order (already sorted by uploadedAt desc)
+    });
   const label        = TAG_LABELS[tag]||tag;
   const years        = [...new Set(allTagPhotos.flatMap(p=>(p.tags||[]).filter(t=>t.startsWith('class-of-')).map(t=>t.replace('class-of-',''))))].sort((a,b)=>b-a);
 
@@ -1406,9 +1499,11 @@ function photoCardHTML(p, i, contextId) {
   const driveBadge = isDrive(p)   ? `<span class="drive-badge">Drive</span>`              : '';
   const embedBadge = isEmbed(p)   ? `<span class="drive-badge" style="background:rgba(192,57,43,.8);">▶ ${p.platform||'Video'}</span>` : '';
   const ctx = contextId ? `,lbContexts['${contextId}']` : '';
-  return `<div class="photo-card" onclick="openLightbox('${p.id}'${ctx})">
+  return `<div class="photo-card" id="pc-${p.id}" data-photoid="${p.id}"
+    onclick="manageMode ? togglePhotoSelect('${p.id}', this) : openLightbox('${p.id}'${ctx})">
     ${mediaThumb(p,i)}
     ${vidBadge}${driveBadge}${embedBadge}
+    <div class="select-check">✓</div>
     <div class="photo-card-overlay"><div class="photo-card-tags">${tags}</div></div>
   </div>`;
 }
@@ -1928,6 +2023,453 @@ function authMsg(code) {
 }
 
 // ══════════════════════════════════════════════════════════════
+
+// ══════════════════════════════════════════════════════════════
+// ── BATCH MANAGE MODE ────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════
+
+let manageMode       = false;
+let currentAlbumTag  = null;   // tag currently being viewed
+let selectedPhotoIds = new Set();
+
+// Called by goToAlbum to store the current tag
+function setCurrentAlbumTag(tag) {
+  currentAlbumTag  = tag;
+  selectedPhotoIds.clear();
+  manageMode = false;
+  // Show admin controls
+  const adminBtns = document.getElementById('albumAdminBtns');
+  if (adminBtns) {
+    adminBtns.style.display = (userRole === 'admin' || isOwner()) ? 'flex' : 'none';
+  }
+  // Hide toolbar
+  const toolbar = document.getElementById('manageToolbar');
+  if (toolbar) toolbar.classList.remove('visible');
+  // Remove manage-active from grid
+  const grid = document.getElementById('albumPhotoGrid');
+  if (grid) grid.classList.remove('manage-active');
+}
+
+window.toggleManageMode = function() {
+  manageMode = !manageMode;
+  selectedPhotoIds.clear();
+  const toolbar = document.getElementById('manageToolbar');
+  const grid    = document.getElementById('albumPhotoGrid');
+  const btn     = document.getElementById('manageModeBtn');
+  if (toolbar) toolbar.classList.toggle('visible', manageMode);
+  if (grid)    grid.classList.toggle('manage-active', manageMode);
+  if (btn)     btn.textContent = manageMode ? '✕ Exit Manage' : '☑ Manage';
+  updateSelectedCount();
+};
+
+function updateSelectedCount() {
+  const el = document.getElementById('selectedCount');
+  if (el) el.textContent = selectedPhotoIds.size;
+}
+
+window.togglePhotoSelect = function(id, cardEl) {
+  if (!manageMode) return;
+  if (selectedPhotoIds.has(id)) {
+    selectedPhotoIds.delete(id);
+    cardEl.classList.remove('selected');
+  } else {
+    selectedPhotoIds.add(id);
+    cardEl.classList.add('selected');
+  }
+  updateSelectedCount();
+};
+
+window.selectAllPhotos = function() {
+  const cards = document.querySelectorAll('#albumPhotoGrid .photo-card');
+  cards.forEach(card => {
+    const id = card.dataset.photoid;
+    if (id) { selectedPhotoIds.add(id); card.classList.add('selected'); }
+  });
+  updateSelectedCount();
+};
+
+window.deselectAllPhotos = function() {
+  selectedPhotoIds.clear();
+  document.querySelectorAll('#albumPhotoGrid .photo-card.selected')
+    .forEach(c => c.classList.remove('selected'));
+  updateSelectedCount();
+};
+
+
+// ── ADD TAG TO SELECTED ───────────────────────────────────────
+let addingTags = new Set();
+
+window.openAddTagPanel = function() {
+  if (!selectedPhotoIds.size) { alert('Select at least one photo first.'); return; }
+  addingTags.clear();
+  closeMoveAlbumPanel();
+  // Build tag chips
+  const container = document.getElementById('addTagChips');
+  if (!container) return;
+  container.innerHTML = Object.entries(TAGS).map(([cat, tagList]) => {
+    const chips = tagList.map(tag => {
+      return `<button onclick="toggleAddTag('${tag}',this)"
+        style="font-family:'Dosis',sans-serif;font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+               padding:4px 11px;border-radius:20px;cursor:pointer;transition:all .15s;
+               background:rgba(255,255,255,.1);color:var(--aqua);border:1.5px solid rgba(255,255,255,.2);">
+        ${TAG_LABELS[tag]||tag}
+      </button>`;
+    }).join('');
+    return `<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+      <span style="font-family:'Dosis',sans-serif;font-weight:700;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(183,213,230,.6);min-width:64px;">${cat}</span>
+      ${chips}
+    </div>`;
+  }).join('');
+  document.getElementById('addTagPanel').style.display = 'block';
+};
+
+window.toggleAddTag = function(tag, btn) {
+  if (addingTags.has(tag)) {
+    addingTags.delete(tag);
+    btn.style.background = 'rgba(255,255,255,.1)';
+    btn.style.color = 'var(--aqua)';
+    btn.style.borderColor = 'rgba(255,255,255,.2)';
+  } else {
+    addingTags.add(tag);
+    btn.style.background = 'var(--gold)';
+    btn.style.color = 'var(--blue)';
+    btn.style.borderColor = 'var(--gold)';
+  }
+};
+
+window.addCustomToSelected = function() {
+  const input = document.getElementById('addTagCustomInput');
+  if (!input) return;
+  const raw = input.value.trim().toLowerCase().replace(/[s]+/g,'-').replace(/[^a-z0-9-]/g,'');
+  if (!raw) return;
+  addingTags.add(raw);
+  input.value = '';
+  // Add a chip for it
+  const container = document.getElementById('addTagChips');
+  if (container) {
+    const chip = document.createElement('div');
+    chip.style.cssText = 'display:flex;align-items:center;gap:6px;flex-wrap:wrap;';
+    chip.innerHTML = `<span style="font-family:'Dosis',sans-serif;font-weight:700;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(183,213,230,.6);min-width:64px;">custom</span>
+      <button style="font-family:'Dosis',sans-serif;font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:4px 11px;border-radius:20px;background:var(--gold);color:var(--blue);border:1.5px solid var(--gold);cursor:default;">
+        ${raw}
+      </button>`;
+    container.appendChild(chip);
+  }
+};
+
+window.closeAddTagPanel = function() {
+  document.getElementById('addTagPanel').style.display = 'none';
+  addingTags.clear();
+};
+
+window.applyAddTags = async function() {
+  if (!addingTags.size) { alert('Select at least one tag to add.'); return; }
+  if (!selectedPhotoIds.size) { alert('No photos selected.'); return; }
+  const tagsToAdd = [...addingTags];
+  let done = 0, failed = 0;
+  for (const id of selectedPhotoIds) {
+    const photo = allPhotos.find(p => p.id === id);
+    if (!photo) continue;
+    const merged = [...new Set([...(photo.tags||[]), ...tagsToAdd])];
+    try {
+      await updateDoc(doc(db,'photos',id), { tags: merged });
+      photo.tags = merged;
+      done++;
+    } catch(e) { failed++; }
+  }
+  closeAddTagPanel();
+  alert(`Tags added to ${done} photo${done!==1?'s':''}${failed?`, ${failed} failed`:'.'}`);
+  selectedPhotoIds.clear();
+  await loadPhotos();
+  window.goToAlbum(currentAlbumTag);
+};
+
+// ── MOVE TO ALBUM ─────────────────────────────────────────────
+window.openMoveToAlbum = function() {
+  if (!selectedPhotoIds.size) { alert('Select at least one photo first.'); return; }
+  closeAddTagPanel();
+  // Populate album select with existing tags
+  const sel = document.getElementById('moveAlbumSelect');
+  if (!sel) return;
+  const tagSet = new Set();
+  allPhotos.forEach(p => (p.tags||[]).forEach(t => {
+    if (!['photos','video'].includes(t) && !t.startsWith('class-of-') && t !== currentAlbumTag)
+      tagSet.add(t);
+  }));
+  sel.innerHTML = '<option value="">— Select destination album —</option>' +
+    [...tagSet].sort().map(t => `<option value="${t}">${TAG_LABELS[t]||t}</option>`).join('');
+  document.getElementById('moveAlbumPanel').style.display = 'block';
+};
+
+window.closeMoveAlbumPanel = function() {
+  document.getElementById('moveAlbumPanel').style.display = 'none';
+};
+
+window.applyMoveToAlbum = async function() {
+  const destTag = document.getElementById('moveAlbumSelect').value;
+  if (!destTag) { alert('Please select a destination album.'); return; }
+  if (!selectedPhotoIds.size) { alert('No photos selected.'); return; }
+  const count = selectedPhotoIds.size;
+  if (!confirm(`Move ${count} photo${count!==1?'s':''} from "${TAG_LABELS[currentAlbumTag]||currentAlbumTag}" to "${TAG_LABELS[destTag]||destTag}"?`)) return;
+
+  let done = 0, failed = 0;
+  for (const id of selectedPhotoIds) {
+    const photo = allPhotos.find(p => p.id === id);
+    if (!photo) continue;
+    const newTags = [...new Set([...(photo.tags||[]).filter(t => t !== currentAlbumTag), destTag])];
+    try {
+      await updateDoc(doc(db,'photos',id), { tags: newTags });
+      photo.tags = newTags;
+      done++;
+    } catch(e) { failed++; }
+  }
+  closeMoveAlbumPanel();
+  alert(`Moved ${done} photo${done!==1?'s':''}${failed?`, ${failed} failed`:'.'}`);
+  selectedPhotoIds.clear();
+  await loadPhotos();
+  const remaining = allPhotos.filter(p => (p.tags||[]).includes(currentAlbumTag));
+  if (remaining.length) window.goToAlbum(currentAlbumTag);
+  else goTo('home');
+};
+
+// ── ADD PHOTOS TO ALBUM ───────────────────────────────────────
+window.openAlbumUpload = function() {
+  if (!currentAlbumTag) return;
+  // Navigate to upload, pre-select the current album tag
+  goTo('upload');
+  // After short delay to let buildTagGrid run, select the tag
+  setTimeout(() => {
+    const chip = document.querySelector(`.t-chip[data-tag="${currentAlbumTag}"]`);
+    if (chip && !chip.classList.contains('selected')) {
+      chip.classList.add('selected');
+      selectedTags.add(currentAlbumTag);
+    }
+  }, 100);
+};
+
+// ── REORDER MODE ─────────────────────────────────────────────
+let reorderMode     = false;
+let dragSrcCard     = null;
+let reorderSnapshot = {}; // photoId -> original sortOrder backup
+
+window.toggleReorderMode = function() {
+  reorderMode = !reorderMode;
+  const grid  = document.getElementById('albumPhotoGrid');
+  const btn   = document.getElementById('reorderModeBtn');
+  const bar   = document.getElementById('reorderSaveBar');
+  if (!grid) return;
+  grid.classList.toggle('reorder-active', reorderMode);
+  if (btn)  btn.textContent = reorderMode ? '✕ Exit Reorder' : '⇅ Reorder';
+  if (bar)  bar.classList.toggle('visible', reorderMode);
+  if (reorderMode) {
+    enableDragDrop(grid);
+    // snapshot current order
+    reorderSnapshot = {};
+    allPhotos.filter(p=>(p.tags||[]).includes(currentAlbumTag))
+      .forEach((p,i) => { reorderSnapshot[p.id] = p.sortOrder ?? i; });
+  } else {
+    disableDragDrop(grid);
+  }
+};
+
+function enableDragDrop(grid) {
+  grid.querySelectorAll('.photo-card').forEach(card => {
+    card.draggable = true;
+    card.addEventListener('dragstart', onDragStart);
+    card.addEventListener('dragover',  onDragOver);
+    card.addEventListener('dragleave', onDragLeave);
+    card.addEventListener('drop',      onDrop);
+    card.addEventListener('dragend',   onDragEnd);
+  });
+}
+
+function disableDragDrop(grid) {
+  grid.querySelectorAll('.photo-card').forEach(card => {
+    card.draggable = false;
+    card.removeEventListener('dragstart', onDragStart);
+    card.removeEventListener('dragover',  onDragOver);
+    card.removeEventListener('dragleave', onDragLeave);
+    card.removeEventListener('drop',      onDrop);
+    card.removeEventListener('dragend',   onDragEnd);
+  });
+}
+
+function onDragStart(e) {
+  dragSrcCard = this;
+  this.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', this.dataset.photoid);
+}
+function onDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  if (this !== dragSrcCard) this.classList.add('drag-over-card');
+}
+function onDragLeave() { this.classList.remove('drag-over-card'); }
+function onDragEnd()   { this.classList.remove('dragging'); dragSrcCard = null; }
+function onDrop(e) {
+  e.preventDefault();
+  this.classList.remove('drag-over-card');
+  if (!dragSrcCard || dragSrcCard === this) return;
+  // Swap in DOM — find the parent photo-grid and swap children
+  const parent = this.parentNode;
+  const srcIdx  = [...parent.children].indexOf(dragSrcCard);
+  const tgtIdx  = [...parent.children].indexOf(this);
+  if (srcIdx < tgtIdx) parent.insertBefore(dragSrcCard, this.nextSibling);
+  else                  parent.insertBefore(dragSrcCard, this);
+}
+
+window.saveReorder = async function() {
+  // For each photo-grid in the album, assign sortOrder based on DOM position
+  const grids = document.querySelectorAll('#albumPhotoGrid .photo-grid');
+  let updates = [];
+  grids.forEach((grid, sectionIdx) => {
+    [...grid.querySelectorAll('.photo-card')].forEach((card, pos) => {
+      const id = card.dataset.photoid;
+      if (id) updates.push({ id, sortOrder: sectionIdx * 10000 + pos });
+    });
+  });
+  // If no year sections (flat grid), use the single grid
+  if (!updates.length) {
+    const flatGrid = document.querySelector('#albumPhotoGrid .photo-grid') ||
+                     document.getElementById('albumPhotoGrid');
+    [...flatGrid.querySelectorAll('.photo-card')].forEach((card, pos) => {
+      const id = card.dataset.photoid;
+      if (id) updates.push({ id, sortOrder: pos });
+    });
+  }
+  let done = 0;
+  for (const {id, sortOrder} of updates) {
+    try {
+      await updateDoc(doc(db,'photos',id), { sortOrder });
+      const p = allPhotos.find(x => x.id === id);
+      if (p) p.sortOrder = sortOrder;
+      done++;
+    } catch(e) {}
+  }
+  alert(`Order saved for ${done} photo${done!==1?'s':'.'}`);
+  reorderMode = false;
+  document.getElementById('reorderSaveBar').classList.remove('visible');
+  document.getElementById('albumPhotoGrid').classList.remove('reorder-active');
+  const btn = document.getElementById('reorderModeBtn');
+  if (btn) btn.textContent = '⇅ Reorder';
+  await loadPhotos();
+  window.goToAlbum(currentAlbumTag);
+};
+
+window.cancelReorder = function() {
+  reorderMode = false;
+  document.getElementById('reorderSaveBar').classList.remove('visible');
+  const grid = document.getElementById('albumPhotoGrid');
+  if (grid) grid.classList.remove('reorder-active');
+  const btn = document.getElementById('reorderModeBtn');
+  if (btn) btn.textContent = '⇅ Reorder';
+  // Re-render the album to restore original order
+  window.goToAlbum(currentAlbumTag);
+};
+
+// ── REMOVE TAG FROM SELECTED ──────────────────────────────────
+window.removeTagFromSelected = async function() {
+  if (!selectedPhotoIds.size) { alert('No photos selected.'); return; }
+  if (!currentAlbumTag) { alert('No album tag set.'); return; }
+  const count = selectedPhotoIds.size;
+  if (!confirm(`Remove the tag "${TAG_LABELS[currentAlbumTag]||currentAlbumTag}" from ${count} photo${count!==1?'s':''}? The photos will stay in the portal but will no longer appear in this album.`)) return;
+
+  let done = 0, failed = 0;
+  for (const id of selectedPhotoIds) {
+    const photo = allPhotos.find(p => p.id === id);
+    if (!photo) continue;
+    const newTags = (photo.tags||[]).filter(t => t !== currentAlbumTag);
+    try {
+      await updateDoc(doc(db,'photos',id), { tags: newTags });
+      photo.tags = newTags;
+      done++;
+    } catch(e) { failed++; }
+  }
+
+  alert(`Done — tag removed from ${done} photo${done!==1?'s':''}${failed?`, ${failed} failed`:'.'}`);
+  selectedPhotoIds.clear();
+  await loadPhotos();
+  // Re-open the album to refresh (it may now be empty)
+  const remaining = allPhotos.filter(p => (p.tags||[]).includes(currentAlbumTag));
+  if (remaining.length) {
+    window.goToAlbum(currentAlbumTag);
+  } else {
+    goTo('home');
+  }
+};
+
+// ── DELETE SELECTED ───────────────────────────────────────────
+window.deleteSelectedPhotos = async function() {
+  if (!selectedPhotoIds.size) { alert('No photos selected.'); return; }
+  const count = selectedPhotoIds.size;
+  if (!confirm(`Permanently delete ${count} photo${count!==1?'s':''}? This cannot be undone.`)) return;
+
+  let done = 0, failed = 0;
+  for (const id of [...selectedPhotoIds]) {
+    try {
+      await deleteDoc(doc(db,'photos',id));
+      done++;
+    } catch(e) { failed++; }
+  }
+
+  alert(`Deleted ${done} photo${done!==1?'s':''}${failed?`, ${failed} failed`:'.'}`);
+  selectedPhotoIds.clear();
+  await loadPhotos();
+  const remaining = allPhotos.filter(p => (p.tags||[]).includes(currentAlbumTag));
+  if (remaining.length) {
+    window.goToAlbum(currentAlbumTag);
+  } else {
+    goTo('home');
+  }
+};
+
+// ── DELETE ENTIRE ALBUM ───────────────────────────────────────
+window.deleteAlbumPrompt = function() {
+  if (!currentAlbumTag) return;
+  const label   = TAG_LABELS[currentAlbumTag] || currentAlbumTag;
+  const photos  = allPhotos.filter(p => (p.tags||[]).includes(currentAlbumTag));
+  const count   = photos.length;
+
+  // Two-choice confirm using a simple approach
+  const choice = window.confirm(
+    `Delete Album: "${label}" (${count} item${count!==1?'s':''})
+
+` +
+    `Click OK to PERMANENTLY DELETE all ${count} photo${count!==1?'s':''} in this album.
+
+` +
+    `Click Cancel, then use "Manage → Remove Tag" if you only want to remove the tag without deleting photos.`
+  );
+
+  if (choice) deleteEntireAlbum('delete');
+};
+
+async function deleteEntireAlbum(mode) {
+  const photos = allPhotos.filter(p => (p.tags||[]).includes(currentAlbumTag));
+  const count  = photos.length;
+  let done = 0, failed = 0;
+
+  if (mode === 'delete') {
+    for (const p of photos) {
+      try { await deleteDoc(doc(db,'photos',p.id)); done++; }
+      catch(e) { failed++; }
+    }
+    alert(`Deleted ${done} photo${done!==1?'s':''}${failed?`, ${failed} failed`:'.'}`);
+  } else {
+    // remove tag only
+    for (const p of photos) {
+      const newTags = (p.tags||[]).filter(t => t !== currentAlbumTag);
+      try { await updateDoc(doc(db,'photos',p.id),{tags:newTags}); p.tags=newTags; done++; }
+      catch(e) { failed++; }
+    }
+    alert(`Tag removed from ${done} photo${done!==1?'s':''}${failed?`, ${failed} failed`:'.'}`);
+  }
+
+  await loadPhotos();
+  goTo('home');
+}
+
 // ── ADMIN TOOLS ──────────────────────────────────────────────
 // ══════════════════════════════════════════════════════════════
 
