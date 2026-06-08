@@ -1505,9 +1505,8 @@ function photoCardHTML(p, i, contextId) {
   const vidBadge   = isVideo(p) && !isEmbed(p) ? `<span class="video-badge">▶ Video</span>` : '';
   const driveBadge = isDrive(p)   ? `<span class="drive-badge">Drive</span>`              : '';
   const embedBadge = isEmbed(p)   ? `<span class="drive-badge" style="background:rgba(192,57,43,.8);">▶ ${p.platform||'Video'}</span>` : '';
-  const ctx = contextId ? `,lbContexts['${contextId}']` : '';
-  return `<div class="photo-card" id="pc-${p.id}" data-photoid="${p.id}"
-    onclick="manageMode ? togglePhotoSelect('${p.id}', this) : openLightbox('${p.id}'${ctx})">
+  return `<div class="photo-card" id="pc-${p.id}" data-photoid="${p.id}" data-ctx="${contextId||''}"
+    onclick="handleCardClick(this)">
     ${mediaThumb(p,i)}
     ${vidBadge}${driveBadge}${embedBadge}
     <div class="select-check">✓</div>
@@ -1544,6 +1543,19 @@ window.clearFilters = function() {
 // lightbox navigation context — which photo list we're browsing
 let lbPhotoList = [];
 let lbPhotoIndex = 0;
+
+// Single card click handler — avoids inline quote-escaping issues
+window.handleCardClick = function(el) {
+  const id     = el.dataset.photoid;
+  const ctxKey = el.dataset.ctx;
+  if (!id) return;
+  if (manageMode) {
+    togglePhotoSelect(id, el);
+  } else {
+    const photoList = (ctxKey && lbContexts[ctxKey]) ? lbContexts[ctxKey] : null;
+    openLightbox(id, photoList);
+  }
+};
 
 window.openLightbox = function(id, photoList) {
   // photoList is the ordered array of photos for the current view (album or all)
@@ -2041,6 +2053,8 @@ function authMsg(code) {
 let manageMode       = false;
 let currentAlbumTag  = null;   // tag currently being viewed
 let selectedPhotoIds = new Set();
+// Expose manageMode on window so handleCardClick (called from inline onclick) can read it
+Object.defineProperty(window, 'manageMode', { get: () => manageMode });
 
 // Called by goToAlbum to store the current tag
 function setCurrentAlbumTag(tag) {
