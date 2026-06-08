@@ -1544,6 +1544,13 @@ window.clearFilters = function() {
 let lbPhotoList = [];
 let lbPhotoIndex = 0;
 
+// Convert Cloudinary URL to force-download version using fl_attachment
+function cldDownloadUrl(url) {
+  if (!url || !url.includes('cloudinary.com')) return url;
+  // Insert fl_attachment into the upload path
+  return url.replace('/upload/', '/upload/fl_attachment/');
+}
+
 // Single card click handler — avoids inline quote-escaping issues
 window.handleCardClick = function(el) {
   const id     = el.dataset.photoid;
@@ -1603,7 +1610,9 @@ function renderLightboxContent(p) {
     actions.innerHTML = `<a class="btn-dl" href="${p.embedUrl.replace('embed/','watch?v=').replace('player.vimeo.com/video/','vimeo.com/')}" target="_blank">▶ Watch on ${p.platform||'Video'}</a>
       <button class="btn-cl" onclick="closeLightbox()">Close</button>${deleteBtn}`;
   } else if (currentUser && p.cloudinaryUrl && !isDrive(p)) {
-    actions.innerHTML = `<a class="btn-dl" href="${p.cloudinaryUrl}" download="${p.title||'media'}" target="_blank">⬇ Download</a>
+  } else if (currentUser && p.cloudinaryUrl && !isDrive(p)) {
+    const dlUrl = cldDownloadUrl(p.cloudinaryUrl);
+    actions.innerHTML = `<a class="btn-dl" href="${dlUrl}" download="${p.title||'photo'}">⬇ Download</a>
       <button class="btn-cl" onclick="closeLightbox()">Close</button>${deleteBtn}`;
   } else if (currentUser && isDrive(p)) {
     actions.innerHTML = `<a class="btn-dl" href="https://drive.google.com/uc?export=download&id=${p.driveId}" target="_blank">⬇ Download from Drive</a>
